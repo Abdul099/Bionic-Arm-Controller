@@ -2,6 +2,7 @@
 #include <Wire.h>
 #include <Adafruit_SSD1306.h>
 
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 //constructors
 Arm_Calibration::Arm_Calibration()
@@ -9,7 +10,8 @@ Arm_Calibration::Arm_Calibration()
 	_emg_pin = A0;
 	_averageMin = 0;
 	_averageMax = 0;
-	Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+	display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  //lcd screen setup
+    display.clearDisplay();
 	display.setTextSize(2);   
     display.setTextColor(WHITE); 
 }
@@ -19,7 +21,8 @@ Arm_Calibration::Arm_Calibration(int pin)
 	_emg_pin = pin;
 	_averageMin = 0;
 	_averageMax = 0;
-	Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+	display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  //lcd screen setup
+    display.clearDisplay();
 	display.setTextSize(2);   
     display.setTextColor(WHITE); 
 }
@@ -27,6 +30,7 @@ Arm_Calibration::Arm_Calibration(int pin)
 //calibrate function
 int Arm_Calibration::Calibrate()
 {
+
 	display.setCursor(0, 0);
 	display.print("  Starting calibration");
 	display.display();
@@ -47,7 +51,7 @@ int Arm_Calibration::Calibrate()
   
   	while (_timer < 10000) {  //rest for 10 seconds to find the min value
   		delay(10);
-    	_amplitude = analogRead(pin);
+    	_amplitude = analogRead(_emg_pin);
     	Serial.print(1000);
     	Serial.print(" ");
     	Serial.print(0);
@@ -70,13 +74,13 @@ int Arm_Calibration::Calibrate()
   	display.print(("   Fully    Contract"));
   	display.display();
 
-  	_timer = 0
+  	_timer = 0;
   	_numberSamples = 0;
   	_averageMax = 0;
 
   	while (_timer < 10000) {  //rest for 10 seconds to find the max value
   		delay(10);
-    	_amplitude = analogRead(pin);
+    	_amplitude = analogRead(_emg_pin);
     	Serial.print(1000);
     	Serial.print(" ");
     	Serial.print(0);
