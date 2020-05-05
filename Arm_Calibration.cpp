@@ -1,6 +1,14 @@
+/*
+  Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
+  Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
+  Last Updated: May 5, 2020
+
+*/
+
 #include <Arm_Calibration.h>
 #include <Wire.h>
 #include <Adafruit_SSD1306.h>
+#include <Arm_Settings.h>
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 

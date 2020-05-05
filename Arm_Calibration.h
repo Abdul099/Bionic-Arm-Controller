@@ -1,3 +1,10 @@
+/*
+  Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
+  Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
+  Last Updated: May 5, 2020
+
+*/
+
 #ifndef Arm_Calibration_h
 
 #define Arm_Calibration_h
@@ -5,10 +12,7 @@
 #include <Arduino.h>
 #include <Adafruit_SSD1306.h>
 #include <Wire.h>
-
-static int SCREEN_WIDTH = 128;
-static int SCREEN_HEIGHT = 64;
-static int OLED_RESET = 13;
+#include <Arm_Settings.h>
 
 class Arm_Calibration
 {

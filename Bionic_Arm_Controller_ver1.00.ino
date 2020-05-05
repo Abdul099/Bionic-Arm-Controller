@@ -6,28 +6,14 @@
   Description: Simplified program that receives emg input via analog pin and outputs PWM signals to 3 servo motors. An all-or-none basis is used to drive the control,
                where a signal below a certain threshold causes the arm to open and a signal above the threshold causes the arm to close. The threshold is determined
                through calibration, which is done through the Arm_Calibration library.
-
 */
-//servo PWM settings
-#define PWM_frequency 60
-#define SERVOMIN 230
-#define SERVOMAX 410
-
-//emg and servo pins
-#define emgpin1 A0
-#define indexServo 0 //pin on servo shield
-#define thumbServo 1
-#define pinkyServo 2
-#define SERVOSPEED 10
-
-#define flag_duration 1000
-#define del 50
 
 #include <Wire.h>
 #include <Adafruit_SSD1306.h>
 #include <Adafruit_PWMServoDriver.h>
 #include <Arm_Calibration.h>
 #include <Adafruit_GFX.h>
+#include <Arm_Settings.h>
 
 int pos1 = 175;   //servo positions
 int pos2 = 0;
@@ -52,13 +38,13 @@ void loop() {
   Serial.print(" ");
   Serial.println(amp1);//print the amplitude to the graph
   
-  if (amp1 > thresh) { //closed
+  if (amp1 > thresh) { //close the arm
     pwm.setPWM(indexServo, 0, 0 + SERVOMIN);
     pwm.setPWM(thumbServo, 0, 175 + SERVOMIN);
     pwm.setPWM(pinkyServo, 0, 0 + SERVOMIN);
     delay(flag_duration);
   }
-  else { //open
+  else { //open the arm
     pwm.setPWM(indexServo, 0, 150 + SERVOMIN);
     pwm.setPWM(thumbServo, 0, 0 + SERVOMIN);
     pwm.setPWM(pinkyServo, 0, 150 + SERVOMIN);
