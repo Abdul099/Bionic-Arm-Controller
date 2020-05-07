@@ -1,3 +1,10 @@
+/*
+  Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
+  Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
+  Last Updated: May 7, 2020
+
+*/
+
 #ifndef Arm_Servo_h
 #define Arm_Servo_h
 
@@ -16,7 +23,7 @@ typedef struct _Servo
 class Arm_Servo
 {
 	private: 
-		_Servo _servos[NUM_SERVOS];
+		_Servo _servos[NUM_SERVOS];//remove
 		int _currentIndex;
 		_Servo findServo(int pin);
 		void  moveServo(int pin, int position); //might become public

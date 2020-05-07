@@ -1,16 +1,15 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: May 5, 2020
+  Last Updated: May 7, 2020
 
 */
-
+#include <Arduino.h>
 #include <Arm_Calibration.h>
 #include <Wire.h>
 #include <Adafruit_SSD1306.h>
 #include <Arm_Settings.h>
 
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 //constructors
 Arm_Calibration::Arm_Calibration()
@@ -18,10 +17,10 @@ Arm_Calibration::Arm_Calibration()
 	_emg_pin = A0;
 	_averageMin = 0;
 	_averageMax = 0;
-	display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  //lcd screen setup
-    display.clearDisplay();
-	display.setTextSize(2);   
-    display.setTextColor(WHITE); 
+	// display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  //lcd screen setup
+   // display.clearDisplay();
+	// display.setTextSize(2);   
+ //    display.setTextColor(WHITE); 
 }
 
 Arm_Calibration::Arm_Calibration(int pin)
@@ -29,26 +28,26 @@ Arm_Calibration::Arm_Calibration(int pin)
 	_emg_pin = pin;
 	_averageMin = 0;
 	_averageMax = 0;
-	display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  //lcd screen setup
-    display.clearDisplay();
-	display.setTextSize(2);   
-    display.setTextColor(WHITE); 
 }
 
 //calibrate function
 int Arm_Calibration::Calibrate()
 {
-
+	Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+	display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  //lcd screen setup
+    display.clearDisplay();
+	display.setTextSize(2);   
+    display.setTextColor(WHITE); 
 	display.setCursor(0, 0);
-	display.print("  Starting calibration");
+	display.println("  Starting calibration");
 	display.display();
 	delay(500);
-	display.print(("  Prepare to Relax"));
+	display.println(("  Prepare to Relax"));
 	display.display();
 	display.clearDisplay();
  	delay(1000); //wait 1 second for patient to 
   	display.setCursor(0, 0);
-  	display.println(("   Relax"));
+  	display.println(("   Relax "));
   	display.display();
   	delay(1000); //wait for a second before we actually start sampling
   	
@@ -57,6 +56,7 @@ int Arm_Calibration::Calibrate()
   	_numberSamples = 0;
   	_averageMin = 0;
   
+  		Serial.println("1");
   	while (_timer < 10000) {  //rest for 10 seconds to find the min value
   		delay(10);
     	_amplitude = analogRead(_emg_pin);
@@ -71,7 +71,7 @@ int Arm_Calibration::Calibrate()
 	}
 
 	display.clearDisplay();
-	_averageMin +=_numberSamples;
+	_averageMin /=_numberSamples;
 
 	display.setCursor(0, 0);
   	display.println(("  Prepare   For Max"));
@@ -102,10 +102,13 @@ int Arm_Calibration::Calibrate()
 	display.clearDisplay();
 	_averageMin +=_numberSamples;
 	
+	int threshold = _averageMin + 0.2 * _averageMax;
+	
 	display.setCursor(0, 0);
   	display.println(("  Computing Results"));
   	display.display();
   	delay(500);
+  	display.clearDisplay();
   	display.setTextSize(1);
   	display.setCursor(0, 0);
   	display.print("Baseline:  ");
@@ -113,9 +116,12 @@ int Arm_Calibration::Calibrate()
   	display.print("Peak:");
   	display.println(_averageMax);
   	display.display();
+  	display.print("Threshold:");
+  	display.println(threshold);
+  	display.display();
   	delay(2000);
   	display.clearDisplay();
-  	int threshold = _averageMin + 0.2 * _averageMax;
+
   	return threshold;
 }
 

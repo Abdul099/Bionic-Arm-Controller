@@ -9,13 +9,14 @@
                through calibration, which is done through the Arm_Calibration library.
 */
 
+#include <Arm_Settings.h>
 #include <Wire.h>
 #include <Adafruit_SSD1306.h>
 #include <Adafruit_PWMServoDriver.h>
 #include <Arm_Calibration.h>
 #include <Adafruit_GFX.h>
-#include <Arm_Settings.h>
 #include <Arm_Servo.h>
+#include <Arm_Demo.h>
 
 int pos1 = 175;   //servo positions
 int pos2 = 0;          
@@ -23,16 +24,16 @@ int pos3 = 175;
 int amp1; 
 int thresh;
 
-//Arm_Calibration Calibrate = Arm_Calibration(A0);
+Arm_Calibration Calibrate = Arm_Calibration();
 Arm_Servo servo = Arm_Servo();
+Arm_Demo demo = Arm_Demo();
 
 void setup() {
-  //thresh = Calibrate.Calibrate();
-  thresh = 200;
-  servo.setup();
-  thresh = 200;
   Serial.begin(9600);
-
+  thresh = Calibrate.Calibrate();
+  //thresh = 200;
+  servo.setup();
+  demo.runDemo();
 }
 
 void loop() {

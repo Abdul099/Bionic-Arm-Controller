@@ -1,3 +1,10 @@
+/*
+  Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
+  Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
+  Last Updated: May 7, 2020
+
+*/
+
 #include <Arm_Servo.h>
 #include <Servo.h>
 #include <Adafruit_PWMServoDriver.h>
@@ -23,13 +30,6 @@ void Arm_Servo::addServo(int pin)
 	_currentIndex++;
 }
 
-void Arm_Servo::moveServo(int pin, int pos) //might become a public method later on
-{
-	if(pin == thumbServo) pwm.setPWM(pin, 0, SERVOMAX-pos);
-	else pwm.setPWM(pin, 0, pos + SERVOMIN);
-
-}
-
 void Arm_Servo::closeFinger(int pin)
 {
 	moveServo(pin, 0);
@@ -46,4 +46,11 @@ _Servo Arm_Servo::findServo(int pin)
 	for (int i =0; i< NUM_SERVOS; i++){
 		if(pin == _servos[i].servoPin) return _servos[i]; //look into the else case
 	}
+}
+
+void Arm_Servo::moveServo(int pin, int pos) //might become a public method later on
+{
+	if(pin == thumbServo) pwm.setPWM(pin, 0, SERVOMAX-pos);
+	else pwm.setPWM(pin, 0, pos + SERVOMIN);
+
 }
