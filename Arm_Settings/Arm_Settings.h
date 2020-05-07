@@ -13,7 +13,9 @@
 #define SERVOMIN 230
 #define SERVOMAX 410
 
-//emg and servo pins
+//emg channel and servo settings
+#define NUM_CHANNELS 1
+#define NUM_SERVOS 3
 #define emgpin1 A0
 #define indexServo 0 //pin on servo shield
 #define thumbServo 1
@@ -30,5 +32,6 @@
 #define SCREEN_HEIGHT 64
 #define OLED_RESET 13
 
+// other settings 
 
 #endif

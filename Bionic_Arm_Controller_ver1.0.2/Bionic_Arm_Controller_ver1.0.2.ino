@@ -1,8 +1,9 @@
+
 /*
-  Project Name: Bionic Arm Controller ver 1.00
+  Project Name: Bionic Arm Controller ver 1.0.2
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: May 5, 2020
+  Last Updated: May 6, 2020
   Description: Simplified program that receives emg input via analog pin and outputs PWM signals to 3 servo motors. An all-or-none basis is used to drive the control,
                where a signal below a certain threshold causes the arm to open and a signal above the threshold causes the arm to close. The threshold is determined
                through calibration, which is done through the Arm_Calibration library.
@@ -14,24 +15,28 @@
 #include <Arm_Calibration.h>
 #include <Adafruit_GFX.h>
 #include <Arm_Settings.h>
+#include <Arm_Servo.h>
 
 int pos1 = 175;   //servo positions
-int pos2 = 0;
+int pos2 = 0;          
 int pos3 = 175;
 int amp1; 
 int thresh;
 
-Arm_Calibration Calibrate = Arm_Calibration(A0);
-Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();//default i2c address: 0x40
+//Arm_Calibration Calibrate = Arm_Calibration(A0);
+Arm_Servo servo = Arm_Servo();
 
 void setup() {
-  thresh = Calibrate.Calibrate();
-  pwm.begin();
-  pwm.setPWMFreq(PWM_frequency);
+  //thresh = Calibrate.Calibrate();
+  thresh = 200;
+  servo.setup();
+  thresh = 200;
+  Serial.begin(9600);
+
 }
 
 void loop() {
-  amp1 = analogRead(emgpin1);//we start by reading the signal value from the emg sensor --> assign this value to amp
+  amp1 = analogRead(A0);//we start by reading the signal value from the emg sensor --> assign this value to amp
   Serial.print(1000);
   Serial.print(" ");
   Serial.print(0);
@@ -39,15 +44,15 @@ void loop() {
   Serial.println(amp1);//print the amplitude to the graph
   
   if (amp1 > thresh) { //close the arm
-    pwm.setPWM(indexServo, 0, 0 + SERVOMIN);
-    pwm.setPWM(thumbServo, 0, 175 + SERVOMIN);
-    pwm.setPWM(pinkyServo, 0, 0 + SERVOMIN);
+    servo.closeFinger(thumbServo);
+    servo.closeFinger(pinkyServo);
+    servo.closeFinger(indexServo);
     delay(flag_duration);
   }
   else { //open the arm
-    pwm.setPWM(indexServo, 0, 150 + SERVOMIN);
-    pwm.setPWM(thumbServo, 0, 0 + SERVOMIN);
-    pwm.setPWM(pinkyServo, 0, 150 + SERVOMIN);
+    servo.openFinger(thumbServo);
+    servo.openFinger(pinkyServo);
+    servo.openFinger(indexServo);
     delay(del);
   }
 }
