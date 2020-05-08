@@ -18,12 +18,15 @@ class Arm_Screen
 {
 	private:
 
+		boolean _started;
+
 	public:
 		Arm_Screen();
 		void prepare();
 		void setTextSize(int size);
-		void printToScreen(char val[]);
-		void printToScreen(char string[], int duration);
+		void printToScreen(char string[]);
+		void printToScreen(int val);
+		void printToScreen(char string[], int val);
 		void clearScreen();
 };
 

@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: May 7, 2020
+  Last Updated: May 8, 2020
 
 */
 #include <Arm_Screen.h>
@@ -13,7 +13,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 Arm_Screen::Arm_Screen()
 {
-
+	_started = 0;
 };
 
 void Arm_Screen::prepare()
@@ -31,7 +31,20 @@ void Arm_Screen::setTextSize(int size)
 	display.setTextSize(size);
 }
 
-void Arm_Screen::printToScreen(char val[])
+void Arm_Screen::printToScreen(char string[])
+{
+
+	Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+	display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+	display.clearDisplay();
+	display.setTextSize(2);   
+    display.setTextColor(WHITE); 
+	display.setCursor(0, 0);
+	display.println(string);
+	display.display();
+}
+
+void Arm_Screen::printToScreen(int val)
 {
 	Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 	display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
@@ -39,21 +52,24 @@ void Arm_Screen::printToScreen(char val[])
 	display.setTextSize(1);   
     display.setTextColor(WHITE); 
 	display.setCursor(0, 0);
-	Serial.println("before");
 	display.println(val);
 	display.display();
-	Serial.println("after");
 }
 
-void Arm_Screen::printToScreen(char string[], int duration)
+void Arm_Screen::printToScreen(char string[], int val)
 {
+
+	Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+	display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
 	display.clearDisplay();
+	display.setTextSize(2);   
+    display.setTextColor(WHITE); 
 	display.setCursor(0, 0);
 	display.println(string);
+	display.println(val);
 	display.display();
-	delay(duration);
-	display.clearDisplay();
 }
+
 
 void Arm_Screen::clearScreen()
 {

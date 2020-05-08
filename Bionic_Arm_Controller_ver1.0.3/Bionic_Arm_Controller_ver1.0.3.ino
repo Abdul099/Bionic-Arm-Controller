@@ -8,7 +8,6 @@
                where a signal below a certain threshold causes the arm to open and a signal above the threshold causes the arm to close. The threshold is determined
                through calibration, which is done through the Arm_Calibration library.
 */
-
 #include <Arm_Settings.h>
 #include <Wire.h>
 #include <Adafruit_SSD1306.h>
@@ -18,13 +17,8 @@
 #include <Arm_Servo.h>
 #include <Arm_Demo.h>
 
-
-int pos1 = 175;   //servo positions
-int pos2 = 0;          
-int pos3 = 175;
 int amp1; 
 int thresh;
-
 Arm_Calibration Calibrate = Arm_Calibration();
 Arm_Servo servo = Arm_Servo();
 Arm_Demo demo = Arm_Demo();
