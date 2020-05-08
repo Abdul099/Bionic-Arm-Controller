@@ -9,7 +9,7 @@
 #include <Wire.h>
 #include <Adafruit_SSD1306.h>
 #include <Arm_Settings.h>
-
+#include <Arm_Screen.h>
 
 //constructors
 Arm_Calibration::Arm_Calibration()
@@ -33,41 +33,39 @@ Arm_Calibration::Arm_Calibration(int pin)
 //calibrate function
 int Arm_Calibration::Calibrate()
 {
+	Arm_Screen screen = Arm_Screen();
+	screen.prepare();
+	screen.printToScreen("beyz");
+	delay(1000);
 	Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 	display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  //lcd screen setup
     display.clearDisplay();
 	display.setTextSize(2);   
     display.setTextColor(WHITE); 
 	display.setCursor(0, 0);
-	display.println("  Starting calibration");
+	display.println("  Starting  Calibration");
 	display.display();
 	delay(500);
-	display.println(("  Prepare to Relax"));
-	display.display();
 	display.clearDisplay();
+	display.setCursor(0, 0);
+	display.println(("  Prepare   to Relax"));
+	display.display();
  	delay(1000); //wait 1 second for patient to 
+ 	display.clearDisplay();
   	display.setCursor(0, 0);
   	display.println(("   Relax "));
   	display.display();
   	delay(1000); //wait for a second before we actually start sampling
-  	
-  	_timer = 0;
-  	_startTime = millis();
+
   	_numberSamples = 0;
   	_averageMin = 0;
   
-  		Serial.println("1");
-  	while (_timer < 10000) {  //rest for 10 seconds to find the min value
+  	while (_numberSamples < 1000) {  //rest for 10 seconds to find the min value
   		delay(10);
     	_amplitude = analogRead(_emg_pin);
-    	Serial.print(1000);
-    	Serial.print(" ");
-    	Serial.print(0);
-    	Serial.print(" ");
-    	Serial.println(_amplitude);    //print the amplitude to the graph
+		printToLaptop(_amplitude);    //print the amplitude to the graph
     	_averageMin += _amplitude;
     	_numberSamples++;
-    	_timer = millis() - _startTime;
 	}
 
 	display.clearDisplay();
@@ -79,30 +77,24 @@ int Arm_Calibration::Calibrate()
   	delay(2000);                
   	display.clearDisplay();
   	display.setCursor(0, 0);
-  	display.print(("   Fully    Contract"));
+  	display.println(("   Fully    Contract"));
   	display.display();
 
-  	_timer = 0;
   	_numberSamples = 0;
   	_averageMax = 0;
 
-  	while (_timer < 10000) {  //rest for 10 seconds to find the max value
+  	while (_numberSamples < 1000) {  //rest for 10 seconds to find the max value
   		delay(10);
     	_amplitude = analogRead(_emg_pin);
-    	Serial.print(1000);
-    	Serial.print(" ");
-    	Serial.print(0);
-    	Serial.print(" ");
-    	Serial.println(_amplitude);    //print the amplitude to the graph
+		printToLaptop(_amplitude);  //print the amplitude to the graph
     	_averageMax += _amplitude;
     	_numberSamples++;
-    	_timer = millis() - _startTime;
 	}
 
 	display.clearDisplay();
-	_averageMin +=_numberSamples;
+	_averageMax /=_numberSamples;
 	
-	int threshold = _averageMin + 0.2 * _averageMax;
+	int threshold = _averageMin + 0.2 * (_averageMax - _averageMin);
 	
 	display.setCursor(0, 0);
   	display.println(("  Computing Results"));
@@ -125,3 +117,11 @@ int Arm_Calibration::Calibrate()
   	return threshold;
 }
 
+void Arm_Calibration::printToLaptop(int val)
+{
+    Serial.print(1000);
+   	Serial.print(" ");
+   	Serial.print(0);
+   	Serial.print(" ");
+   	Serial.println(val);
+}

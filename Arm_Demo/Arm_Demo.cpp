@@ -16,7 +16,7 @@ extern Arm_Servo servo;
 Arm_Demo::Arm_Demo()
 {
 	_standardDelay = 500;
-	for (int i=0; i< NUM_SERVOS; i++){ //for now, later figure out a way to store pins in a datastructure that can be accessible
+	for (int i=0; i< NUM_SERVOS; i++){ //temperory thing, later figure out a way to store pins in a datastructure that can be accessible
 		servoPins[i] = i;
 	}
 }
@@ -34,17 +34,17 @@ void Arm_Demo::runDemo()
 	delay(_standardDelay);
 	openHand();
 	delay(_standardDelay);
-	closeHand();
-	delay(_standardDelay);
 	fingerByFinger();
 	delay(_standardDelay);
-	closeHand();
+	openHand();
 	delay(_standardDelay);
 	thumbsUp();
 	delay(_standardDelay);
-	closeHand();
+	openHand();
 	delay(_standardDelay);
 	vSign();
+	delay(_standardDelay);
+	openHand();
 	delay(_standardDelay);
 }
 

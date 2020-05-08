@@ -1,9 +1,9 @@
 
 /*
-  Project Name: Bionic Arm Controller ver 1.0.2
+  Project Name: Bionic Arm Controller ver 1.0.3
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: May 6, 2020
+  Last Updated: May 7, 2020
   Description: Simplified program that receives emg input via analog pin and outputs PWM signals to 3 servo motors. An all-or-none basis is used to drive the control,
                where a signal below a certain threshold causes the arm to open and a signal above the threshold causes the arm to close. The threshold is determined
                through calibration, which is done through the Arm_Calibration library.
@@ -17,6 +17,7 @@
 #include <Adafruit_GFX.h>
 #include <Arm_Servo.h>
 #include <Arm_Demo.h>
+
 
 int pos1 = 175;   //servo positions
 int pos2 = 0;          

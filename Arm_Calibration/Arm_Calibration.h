@@ -13,6 +13,7 @@
 #include <Adafruit_SSD1306.h>
 #include <Wire.h>
 #include <Arm_Settings.h>
+#include <Arm_Screen.h>
 
 class Arm_Calibration
 {
@@ -24,11 +25,13 @@ class Arm_Calibration
 		long int _numberSamples;
 		long int _startTime;
 		long int _timer;
+		void printToLaptop(int val);
 
 	public:
 		Arm_Calibration();
 		Arm_Calibration(int pin);
 		int Calibrate();
+		int CalibrateAdvanced();
 };
 
 #endif
