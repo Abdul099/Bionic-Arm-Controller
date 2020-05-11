@@ -2,7 +2,6 @@
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
   Last Updated: May 8, 2020
-
 */
 #include <Arm_Screen.h>
 #include <Wire.h>
@@ -49,24 +48,23 @@ void Arm_Screen::printToScreen(int val)
 	Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 	display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
 	display.clearDisplay();
-	display.setTextSize(1);   
+	display.setTextSize(2);   
     display.setTextColor(WHITE); 
 	display.setCursor(0, 0);
 	display.println(val);
 	display.display();
 }
 
-void Arm_Screen::printToScreen(char string[], int val)
+void Arm_Screen::printToScreen(char string[], int value)
 {
-
-	Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+	// display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 	display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
 	display.clearDisplay();
 	display.setTextSize(2);   
     display.setTextColor(WHITE); 
 	display.setCursor(0, 0);
 	display.println(string);
-	display.println(val);
+	display.println(value);
 	display.display();
 }
 

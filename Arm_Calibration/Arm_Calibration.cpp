@@ -2,7 +2,6 @@
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
   Last Updated: May 8, 2020
-
 */
 #include <Arduino.h>
 #include <Arm_Calibration.h>
@@ -17,10 +16,6 @@ Arm_Calibration::Arm_Calibration()
 	_emg_pin = A0;
 	_averageMin = 0;
 	_averageMax = 0;
-	// display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  //lcd screen setup
-   // display.clearDisplay();
-	// display.setTextSize(2);   
- //    display.setTextColor(WHITE); 
 }
 
 Arm_Calibration::Arm_Calibration(int pin)
@@ -45,7 +40,7 @@ int Arm_Calibration::Calibrate()
    	_numberSamples = 0;
    	_averageMin = 0;
   
-  	while (_numberSamples < 1000) {  ///take 1000 samples at 100 HZ ~ 10s
+  	while (_numberSamples < 100) {  ///take 1000 samples at 100 HZ ~ 10s
   		delay(10);
      	_amplitude = analogRead(_emg_pin);
 	 	printToLaptop(_amplitude);    //print the amplitude to the graph
@@ -61,7 +56,7 @@ int Arm_Calibration::Calibrate()
   	_numberSamples = 0;
   	_averageMax = 0;
 
-   	while (_numberSamples < 1000) {  //rest for 10 seconds to find the max value
+   	while (_numberSamples < 100) {  //rest for 10 seconds to find the max value
   		delay(10);
     	_amplitude = analogRead(_emg_pin);
 		printToLaptop(_amplitude);  //print the amplitude to the graph
@@ -73,11 +68,13 @@ int Arm_Calibration::Calibrate()
 	int threshold = _averageMin + 0.2 * (_averageMax - _averageMin);
 	screen.printToScreen("  Computing Results");
   	delay(500);
-	screen.printToScreen(_averageMin);
+	screen.printToScreen("Min", _averageMin);
 	delay(1000);
-	screen.printToScreen(_averageMax);
+	screen.printToScreen("MAX:", _averageMax);
 	delay(1000);
-	screen.printToScreen(threshold);
+	screen.printToScreen("Thresh", threshold);
+	delay(2000);
+	//screen.printToScreen("Done Calibration");
    	return threshold;
 }
 
