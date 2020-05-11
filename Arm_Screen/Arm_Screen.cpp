@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: May 8, 2020
+  Last Updated: May 11, 2020
 */
 #include <Arm_Screen.h>
 #include <Wire.h>

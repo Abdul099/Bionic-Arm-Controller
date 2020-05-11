@@ -32,6 +32,9 @@
 #define SCREEN_HEIGHT 64
 #define OLED_RESET 13
 
+//Calibration Settings
+#define NUM_CONTRACTIONS 10 // number of contractions needed for advanced calibration mode
+#define BUFFER_WIDTH 20 //buffer window for which scores are not counted for candidate thresholds
 // other settings 
 
 #endif
