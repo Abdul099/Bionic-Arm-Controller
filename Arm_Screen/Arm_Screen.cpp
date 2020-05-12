@@ -17,7 +17,7 @@ Arm_Screen::Arm_Screen()
 
 void Arm_Screen::prepare()
 {
-	Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+	//Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 	display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
 	display.clearDisplay();
 	display.setTextSize(2);   
@@ -30,16 +30,15 @@ void Arm_Screen::setTextSize(int size)
 	display.setTextSize(size);
 }
 
-void Arm_Screen::printToScreen(char string[])
+void Arm_Screen::printToScreen(String str)
 {
-
-	Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-	display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+	//Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+	//display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
 	display.clearDisplay();
 	display.setTextSize(2);   
     display.setTextColor(WHITE); 
 	display.setCursor(0, 0);
-	display.println(string);
+	display.println(str);
 	display.display();
 }
 
@@ -55,16 +54,16 @@ void Arm_Screen::printToScreen(int val)
 	display.display();
 }
 
-void Arm_Screen::printToScreen(char string[], int value)
+void Arm_Screen::printToScreen(String s, int v)
 {
-	// display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-	display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+   // display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+	//display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
 	display.clearDisplay();
 	display.setTextSize(2);   
     display.setTextColor(WHITE); 
 	display.setCursor(0, 0);
-	display.println(string);
-	display.println(value);
+	display.println(s);
+	display.println(v);
 	display.display();
 }
 

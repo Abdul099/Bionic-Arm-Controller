@@ -66,7 +66,7 @@ int Arm_Calibration::Calibrate(int samples)
 
 	_averageMax /=_numberSamples;
 	int threshold = _averageMin + 0.2 * (_averageMax - _averageMin);
-	screen.printToScreen("  Computing Results");
+	screen.printToScreen(" Computing Results");
   	delay(500);
 	screen.printToScreen("Min", _averageMin);
 	delay(1000);
@@ -101,9 +101,9 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 	 }
 
 	 _averageMin /=_numberSamples;
- 	screen.printToScreen("  Prepare   to     Contract");
+ 	screen.printToScreen("  Prepare   to       Contract");
    	delay(2000);                
-	screen.printToScreen("  Contract Fully");
+	screen.printToScreen("Contract Fully");
 
   	_numberSamples = 0;
   	_averageMax = 0;
@@ -121,8 +121,7 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 	int threshs[10];
 	int threshscores[10];
 	int buffers[10];
-	int trainingData[samples*2];
-	
+	int* trainingData = (int*) malloc(2*samples*sizeof(int));
 	for (int i = 0; i<10; i++){
 		threshs[i] = _averageMin+(i/10)*(_averageMax - _averageMin);//fill each array element with a candidate threshold value
 		threshscores[i] = 0;//initialize an array of zeros
@@ -130,6 +129,7 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 	}
 
 	screen.printToScreen("Perform 10 Contractions");
+
 	for(int i =0; i<_numberSamples; i++){
 		delay(10);
 		_amplitude = analogRead(_emg_pin);
@@ -149,7 +149,7 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 		}
 	}
 
-	byte selectedIndex;
+	int selectedIndex;
 
 	for(int i=10; i>0; i--){
 		if(threshscores[i]>NUM_CONTRACTIONS){
@@ -158,15 +158,15 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 		}
 	}
 
-	int threshold = threshs[selectedIndex];
+    int threshold = threshs[selectedIndex];
 
-	screen.printToScreen("  Computing Results");
-  	delay(500);
-	screen.printToScreen("Min", _averageMin);
-	delay(1000);
-	screen.printToScreen("MAX", _averageMax);
-	delay(1000);
-	screen.printToScreen("Index", selectedIndex);
+    screen.printToScreen(" Computing Results");
+   	delay(500);
+    screen.printToScreen("Min", _averageMin);
+    delay(1000);
+    screen.printToScreen("MAX", _averageMax);
+    delay(1000);
+    screen.printToScreen("Index", selectedIndex);
 	delay(1000);
 	screen.printToScreen("Thresh", threshold);
 	delay(2000);

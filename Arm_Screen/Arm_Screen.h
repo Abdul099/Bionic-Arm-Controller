@@ -24,9 +24,9 @@ class Arm_Screen
 		Arm_Screen();
 		void prepare();
 		void setTextSize(int size);
-		void printToScreen(char string[]);
+		void printToScreen(String str);
 		void printToScreen(int val);
-		void printToScreen(char string[], int val);
+		void printToScreen(String s, int v);
 		void clearScreen();
 };
 
