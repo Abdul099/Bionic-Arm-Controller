@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: May 7, 2020
+  Last Updated: May 13, 2020
 
 */
 
@@ -22,6 +22,7 @@ class Arm_Demo
 		void thumbsUp();
 		void vSign();
 		void fingerByFinger();
+		void gangsterSign();
 		int _standardDelay;
 		int servoPins[NUM_SERVOS];
 

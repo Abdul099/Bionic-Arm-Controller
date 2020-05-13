@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: May 7, 2020
+  Last Updated: May 13, 2020
 
 */
 
@@ -37,7 +37,7 @@ void Arm_Servo::closeFinger(int pin)
 
 void Arm_Servo::openFinger(int pin)
 {
-	moveServo(pin, 175);
+	moveServo(pin, 170);
 }
 //add a close hand function
 
@@ -52,5 +52,4 @@ void Arm_Servo::moveServo(int pin, int pos) //might become a public method later
 {
 	if(pin == thumbServo) pwm.setPWM(pin, 0, SERVOMAX-pos);
 	else pwm.setPWM(pin, 0, pos + SERVOMIN);
-
 }
