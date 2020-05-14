@@ -35,7 +35,6 @@ void Arm_Demo::runDemo()
 	openHand();
 	delay(_standardDelay);
 	fingerByFinger();
-	delay(_standardDelay);
 	thumbsUp();
 	delay(_standardDelay);
 	openHand();

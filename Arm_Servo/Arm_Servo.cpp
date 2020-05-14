@@ -32,12 +32,12 @@ void Arm_Servo::addServo(int pin)
 
 void Arm_Servo::closeFinger(int pin)
 {
-	moveServo(pin, 0);
+	moveServo(pin, -10);
 }
 
 void Arm_Servo::openFinger(int pin)
 {
-	moveServo(pin, 170);
+	moveServo(pin, 180);
 }
 //add a close hand function
 

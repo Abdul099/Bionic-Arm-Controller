@@ -72,9 +72,9 @@ int Arm_Calibration::Calibrate(int samples)
 	delay(1000);
 	screen.printToScreen("MAX:", _averageMax);
 	delay(1000);
-	screen.printToScreen("Thresh", threshold);
-	delay(2000);
-	//screen.printToScreen("Done Calibration");
+	// screen.printToScreen("Thresh", threshold);
+	// delay(2000);
+	screen.printToScreen("Done Calibration");
    	return threshold;
 }
 
@@ -103,7 +103,7 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 	 _averageMin /=_numberSamples;
  	screen.printToScreen("  Prepare   to       Contract");
    	delay(2000);                
-	screen.printToScreen("Contract Fully");
+	screen.printToScreen("Contract  Fully");
 
   	_numberSamples = 0;
   	_averageMax = 0;
@@ -118,60 +118,76 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 
 	_averageMax /=_numberSamples;
 
-	int threshs[10];
+	int threshs[10];//possible to use struct
 	int threshscores[10];
 	int buffers[10];
-	int* trainingData = (int*) malloc(2*samples*sizeof(int));
+	int trainingData[30];
+    //int* trainingData = (int*) malloc(2*samples*sizeof(int));
+    
 	for (int i = 0; i<10; i++){
-		threshs[i] = _averageMin+(i/10)*(_averageMax - _averageMin);//fill each array element with a candidate threshold value
+		threshs[i] = _averageMin+((i)*(_averageMax - _averageMin))/10;//fill each array element with a candidate threshold value
 		threshscores[i] = 0;//initialize an array of zeros
 		buffers[i] = 0; //another array of zeros
 	}
 
+	for (int i = 0; i<30; i++){
+  		trainingData[i] = 0;
+	}
+	for (int i = 0; i<30; i++){
+		delay(1);
+  		Serial.println(trainingData[i]);
+	}
 	screen.printToScreen("Perform 10 Contractions");
 
-	for(int i =0; i<_numberSamples; i++){
-		delay(10);
-		_amplitude = analogRead(_emg_pin);
-		printToLaptop(_amplitude);
-		trainingData[i] = _amplitude;
-	}
+	// for(int i =0; i<400; i++){
+	// 	delay(10);
+	// 	_amplitude = analogRead(_emg_pin);
+	// 	printToLaptop(_amplitude);
+	// 	trainingData[i] = _amplitude;
+	// }
 
-	for(int i=0; i<_numberSamples; i++){
-		for(int j=0; j<10; j++){
-			if(trainingData[i] > threshs[j] && buffers[j] >=0){
-				threshscores[j]++;
-				buffers[j] = BUFFER_WIDTH;
-			} 
-			else {
-				buffers[j]--;
-			}
-		}
-	}
+	// for(int i=0; i<400; i++){
+	// 	for(int j=0; j<10; j++){
+	// 		if(trainingData[i] > threshs[j] && buffers[j] <= 0){
+	// 			threshscores[j]++;
+	// 			buffers[j] = 5;
+	// 		} 
+	// 		else {
+	// 			buffers[j]--;
+	// 		}
+	// 	}
+	// }
 
-	int selectedIndex;
+	//int selectedIndex;
 
-	for(int i=10; i>0; i--){
-		if(threshscores[i]>NUM_CONTRACTIONS){
-			selectedIndex = i;
-			break;
-		}
-	}
 
-    int threshold = threshs[selectedIndex];
+	// for (int i=0; i<10; i++){
+	// 	Serial.print(i);
+	// 	Serial.print(": ");
+	// 	Serial.println(trainingData[i]);
+	// }
 
-    screen.printToScreen(" Computing Results");
-   	delay(500);
-    screen.printToScreen("Min", _averageMin);
-    delay(1000);
-    screen.printToScreen("MAX", _averageMax);
-    delay(1000);
-    screen.printToScreen("Index", selectedIndex);
-	delay(1000);
-	screen.printToScreen("Thresh", threshold);
-	delay(2000);
+	// for(int i=10; i>0; i--){
+	// 	if(threshscores[i]>NUM_CONTRACTIONS){
+	// 		selectedIndex = i;
+	// 		break;
+	// 	}
+	// }
 
-   	return threshold;
+    //int threshold = threshs[selectedIndex];
+
+    // screen.printToScreen(" Computing Results");
+   	// delay(500);
+    // screen.printToScreen("Min", _averageMin);
+    // delay(1000);
+    // screen.printToScreen("MAX", _averageMax);
+    // delay(1000);
+    // screen.printToScreen("Index", selectedIndex);
+	// delay(1000);
+	// screen.printToScreen("Thresh", threshold);
+	// delay(2000);
+	screen.printToScreen("Done       Calibration");
+   	return 1000;
 }
 
 void Arm_Calibration::printToLaptop(int val)
