@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: May 11, 2020
+  Last Updated: May 18, 2020
 */
 #include <Arduino.h>
 #include <Arm_Calibration.h>
@@ -84,9 +84,9 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 	screen.prepare();
 	// screen.printToScreen(" Ready to Calibrate");
 	// delay(500);
-	screen.printToScreen(" Prepare    to Relax");
+	screen.printToScreen("Prepare   to Relax");
  	delay(1000); //wait 1 second for patient to 
-	screen.printToScreen("  Relax");
+	screen.printToScreen("Relax");
    	delay(1000); //wait for a second before we actually start sampling
 
    	_numberSamples = 0;
@@ -101,7 +101,7 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 	 }
 
 	 _averageMin /=_numberSamples;
- 	screen.printToScreen("  Prepare   to      Contract");
+ 	screen.printToScreen("Prepare   to        Contract");
    	delay(2000);                
 	screen.printToScreen("Contract  Fully");
 
@@ -120,24 +120,24 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 
 	int* threshs = (int*) malloc(10*sizeof(int));;//possible to use struct
 	int* threshscores = (int*) malloc(10*sizeof(int));;
-    int* trainingData = (int*) malloc(5*sizeof(int));
+    int* trainingData = (int*) malloc(SIZE_TRAININGDATA*sizeof(int));
     
 	for (int i = 0; i<10; i++){
 		threshs[i] = _averageMin+((i)*(_averageMax - _averageMin))/10;//fill each array element with a candidate threshold value
 		threshscores[i] = 0;//initialize an array of zeros
 	}
 
-	for (int i = 0; i<5; i++){
+	for (int i = 0; i<SIZE_TRAININGDATA; i++){
   		trainingData[i] = 0;
 	}
-	for (int i = 0; i<5; i++){
+	for (int i = 0; i<SIZE_TRAININGDATA; i++){
   		Serial.println(trainingData[i]);
 	}
 
 	for(int c = 0; c<NUM_CONTRACTIONS; c++){ // for each contraction
 		screen.printToScreen("Contract", c+1);
 
-		for(int i =0; i<5; i++){
+		for(int i =0; i<SIZE_TRAININGDATA; i++){
 			delay(50);
 			_amplitude = analogRead(_emg_pin);
 			printToLaptop(_amplitude);
@@ -169,7 +169,7 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 	}
 
 	for(int i=9; i>0; i--){ 
-		if(threshscores[i]>=9){
+		if(threshscores[i]>=8){ // aim at capturing 80 percent of contractions
 			selectedIndex = i;
 			break;
 		}

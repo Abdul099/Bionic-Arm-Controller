@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: May 11, 2020
+  Last Updated: May 18, 2020
 
 */
 
@@ -35,6 +35,7 @@
 //Calibration Settings
 #define NUM_CONTRACTIONS 10 // number of contractions needed for advanced calibration mode
 #define BUFFER_WIDTH 20 //buffer window for which scores are not counted for candidate thresholds
+#define SIZE_TRAININGDATA 15
 // other settings 
 
 #endif
