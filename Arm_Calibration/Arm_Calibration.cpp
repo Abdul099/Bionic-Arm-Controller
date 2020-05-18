@@ -118,13 +118,18 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 
 	_averageMax /=_numberSamples;
 
-	int* threshs = (int*) malloc(10*sizeof(int));;//possible to use struct
-	int* threshscores = (int*) malloc(10*sizeof(int));;
+	struct candidate{
+		unsigned int threshVal : 10;
+		unsigned int score : 10;
+	};
+	candidate candidates[10];
+	// unsigned int threshs[10];
+	// int threshscores[10];
     int* trainingData = (int*) malloc(SIZE_TRAININGDATA*sizeof(int));
     
 	for (int i = 0; i<10; i++){
-		threshs[i] = _averageMin+((i)*(_averageMax - _averageMin))/10;//fill each array element with a candidate threshold value
-		threshscores[i] = 0;//initialize an array of zeros
+		candidates[i].threshVal = _averageMin+((i)*(_averageMax - _averageMin))/10;//fill each array element with a candidate threshold value
+		candidates[i].score = 0;//initialize an array of zeros
 	}
 
 	for (int i = 0; i<SIZE_TRAININGDATA; i++){
@@ -147,8 +152,8 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 		for(int i = 0; i<10; i++){//for each candidate
 			bool added = 0;
 			for(int j = 0; j<5; j++){
-				if(!added && trainingData[j]>threshs[i]){
-					threshscores[i]++;
+				if(!added && trainingData[j]>candidates[i].threshVal){
+					candidates[i].score++;
 					added = 1;
 				}
 			}
@@ -165,17 +170,17 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 	for (int i=0; i<10; i++){
 		Serial.print(i);
 		Serial.print(": ");
-		Serial.println(threshscores[i]);
+		Serial.println(candidates[i].score);
 	}
 
 	for(int i=9; i>0; i--){ 
-		if(threshscores[i]>=8){ // aim at capturing 80 percent of contractions
+		if(candidates[i].score>=8){ // aim at capturing 80 percent of contractions
 			selectedIndex = i;
 			break;
 		}
 	}
 
-    int threshold = threshs[selectedIndex];
+    int threshold = candidates[selectedIndex].threshVal;
 
     screen.printToScreen("Results:");
    	delay(500);
