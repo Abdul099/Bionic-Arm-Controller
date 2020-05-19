@@ -25,7 +25,10 @@ Arm_Calibration::Arm_Calibration(int pin)
 	_averageMax = 0;
 }
 
-//calibrate function
+/*basic calibrate function used for quick calibration
+Finds average resting state and average contracting state 
+Assigns a threshold at 20% inside the range between both averages
+*/
 int Arm_Calibration::Calibrate(int samples)
 {
 	Arm_Screen screen = Arm_Screen();
@@ -40,7 +43,7 @@ int Arm_Calibration::Calibrate(int samples)
    	_numberSamples = 0;
    	_averageMin = 0;
   
-  	while (_numberSamples < samples) {  ///take 1000 samples at 100 HZ ~ 10s
+  	while (_numberSamples < samples) {  ///take samples at 100 HZ ~ 10s
   		delay(10);
      	_amplitude = analogRead(_emg_pin);
 	 	printToLaptop(_amplitude);    //print the amplitude to the graph
@@ -49,9 +52,9 @@ int Arm_Calibration::Calibrate(int samples)
 	 }
 
 	 _averageMin /=_numberSamples;
- 	screen.printToScreen(" Prepare   to      Contract");
+ 	screen.printToScreen("Prepare    to      Contract");
    	delay(2000);                
-	screen.printToScreen("  Contract Fully");
+	screen.printToScreen(" Contract   Fully");
 
   	_numberSamples = 0;
   	_averageMax = 0;
@@ -65,7 +68,8 @@ int Arm_Calibration::Calibrate(int samples)
 	}
 
 	_averageMax /=_numberSamples;
-	int threshold = _averageMin + 0.2 * (_averageMax - _averageMin);
+	int threshold = _averageMin + 0.2 * (_averageMax - _averageMin); //assign threshold at 20% within the range
+	
 	screen.printToScreen(" Computing Results");
   	delay(500);
 	screen.printToScreen("Min", _averageMin);
@@ -78,12 +82,11 @@ int Arm_Calibration::Calibrate(int samples)
    	return threshold;
 }
 
+//Advanced version of calibrate involving resampling to determine a value for the threshold
 int Arm_Calibration::CalibrateAdvanced(int samples)
 {
 	Arm_Screen screen = Arm_Screen();
 	screen.prepare();
-	// screen.printToScreen(" Ready to Calibrate");
-	// delay(500);
 	screen.printToScreen("Prepare   to Relax");
  	delay(1000); //wait 1 second for patient to 
 	screen.printToScreen("Relax");
@@ -92,7 +95,7 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
    	_numberSamples = 0;
    	_averageMin = 0;
   
-  	while (_numberSamples < samples) {  ///take 1000 samples at 100 HZ ~ 10s
+  	while (_numberSamples < samples) {  ///take samples at 100 HZ ~ 10s
   		delay(10);
      	_amplitude = analogRead(_emg_pin);
 	 	printToLaptop(_amplitude);    //print the amplitude to the graph
@@ -117,8 +120,10 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 	}
 
 	_averageMax /=_numberSamples;
+	screen.printToScreen("");
+	delay(1500);
 
-	struct candidate{
+	struct candidate{ //create struct for 10 candidate thresholds, of whoch 1 will be chosen at the end
 		unsigned int threshVal : 10;
 		unsigned int score : 6;
 	};
@@ -127,18 +132,18 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
     uint8_t* trainingData = (uint8_t*) malloc(SIZE_TRAININGDATA*sizeof(uint8_t));
     
 	for (int i = 0; i<10; i++){
-		candidates[i].threshVal = _averageMin+((i)*(_averageMax - _averageMin))/10;//fill each array element with a candidate threshold value
-		candidates[i].score = 0;//initialize an array of zeros
+		candidates[i].threshVal = _averageMin+((i)*(_averageMax - _averageMin))/10;//in increments of 10% starting at averageMin
+		candidates[i].score = 0;//initialize scores with zeros
 	}
 
 	for (int i = 0; i<SIZE_TRAININGDATA; i++){
-  		trainingData[i] = 0;
+  		trainingData[i] = 0; //initialize an array of zeros for trainingData
 	}
 
 	for(int c = 0; c<NUM_CONTRACTIONS; c++){ // for each contraction
 		screen.printToScreen("Contract", c+1);
 
-		for(int i =0; i<SIZE_TRAININGDATA; i++){
+		for(int i =0; i<SIZE_TRAININGDATA; i++){//fill each datapoint in trainingData
 			delay(50);
 			_amplitude = analogRead(_emg_pin);
 			printToLaptop(_amplitude);
@@ -147,31 +152,28 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 
 		for(int i = 0; i<10; i++){//for each candidate
 			bool added = 0;
-			for(int j = 0; j<5; j++){
+			for(int j = 0; j<SIZE_TRAININGDATA; j++){//for each datapoint in trainingData
 				if(!added && (trainingData[j]*4)>candidates[i].threshVal){ //decompress the value from training data and compare it
 					candidates[i].score++;
 					added = 1;
+					Serial.print(i);
+					Serial.println("added");
 				}
 			}
 		}
 
 		screen.printToScreen("Wait");
-		delay(1000);
+		delay(800);
     }
 
-	for (int i = 0; i<SIZE_TRAININGDATA; i++){
-  		Serial.println(trainingData[i]);
-	}
-
 	free(trainingData);
-
 	int selectedIndex;
 
-	for (int i=0; i<10; i++){
-		Serial.print(i);
-		Serial.print(": ");
-		Serial.println(candidates[i].score);
-	}
+	// for (int i=0; i<10; i++){
+	// 	Serial.print(i);
+	// 	Serial.print(": ");
+	// 	Serial.println(candidates[i].score);
+	// }
 
 	for(int i=9; i>0; i--){ 
 		if(candidates[i].score>=8){ // aim at capturing 80 percent of contractions
@@ -185,18 +187,19 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
     screen.printToScreen("Results:");
    	delay(500);
     screen.printToScreen("Min", _averageMin);
-    delay(1000);
+    delay(2000);
     screen.printToScreen("MAX", _averageMax);
-    delay(1000);
-    screen.printToScreen("Index", selectedIndex);
-	delay(1000);
+    delay(2000);
+    screen.printToScreen("Index     Chosen", selectedIndex);
+	delay(3000);
 	screen.printToScreen("Thresh",threshold);
-	delay(2000);
+	delay(3000);
 
 	screen.printToScreen("Done");
    	return 1000;
 }
 
+//helper method that allows us to print to the graph of the Arduino Serial Monitor
 void Arm_Calibration::printToLaptop(int val)
 {
     Serial.print(1000);
