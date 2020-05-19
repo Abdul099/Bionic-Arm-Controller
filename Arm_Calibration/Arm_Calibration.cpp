@@ -72,8 +72,8 @@ int Arm_Calibration::Calibrate(int samples)
 	delay(1000);
 	screen.printToScreen("MAX:", _averageMax);
 	delay(1000);
-	// screen.printToScreen("Thresh", threshold);
-	// delay(2000);
+	screen.printToScreen("Thresh", threshold);
+	delay(2000);
 	screen.printToScreen("Done Calibration");
    	return threshold;
 }
@@ -120,12 +120,11 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 
 	struct candidate{
 		unsigned int threshVal : 10;
-		unsigned int score : 10;
+		unsigned int score : 6;
 	};
+
 	candidate candidates[10];
-	// unsigned int threshs[10];
-	// int threshscores[10];
-    int* trainingData = (int*) malloc(SIZE_TRAININGDATA*sizeof(int));
+    uint8_t* trainingData = (uint8_t*) malloc(SIZE_TRAININGDATA*sizeof(uint8_t));
     
 	for (int i = 0; i<10; i++){
 		candidates[i].threshVal = _averageMin+((i)*(_averageMax - _averageMin))/10;//fill each array element with a candidate threshold value
@@ -135,9 +134,6 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 	for (int i = 0; i<SIZE_TRAININGDATA; i++){
   		trainingData[i] = 0;
 	}
-	for (int i = 0; i<SIZE_TRAININGDATA; i++){
-  		Serial.println(trainingData[i]);
-	}
 
 	for(int c = 0; c<NUM_CONTRACTIONS; c++){ // for each contraction
 		screen.printToScreen("Contract", c+1);
@@ -146,13 +142,13 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 			delay(50);
 			_amplitude = analogRead(_emg_pin);
 			printToLaptop(_amplitude);
-			trainingData[i] = _amplitude;
+			trainingData[i] = _amplitude/4; //compress the 10 bit ADC reading into an 8bit in order to store it
 		}
 
 		for(int i = 0; i<10; i++){//for each candidate
 			bool added = 0;
 			for(int j = 0; j<5; j++){
-				if(!added && trainingData[j]>candidates[i].threshVal){
+				if(!added && (trainingData[j]*4)>candidates[i].threshVal){ //decompress the value from training data and compare it
 					candidates[i].score++;
 					added = 1;
 				}
@@ -162,6 +158,10 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 		screen.printToScreen("Wait");
 		delay(1000);
     }
+
+	for (int i = 0; i<SIZE_TRAININGDATA; i++){
+  		Serial.println(trainingData[i]);
+	}
 
 	free(trainingData);
 

@@ -34,8 +34,7 @@
 
 //Calibration Settings
 #define NUM_CONTRACTIONS 10 // number of contractions needed for advanced calibration mode
-#define BUFFER_WIDTH 20 //buffer window for which scores are not counted for candidate thresholds
-#define SIZE_TRAININGDATA 15
+#define SIZE_TRAININGDATA 80
 // other settings 
 
 #endif
