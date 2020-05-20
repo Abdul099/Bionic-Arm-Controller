@@ -87,8 +87,8 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 {
 	Arm_Screen screen = Arm_Screen();
 	screen.prepare();
-	screen.printToScreen("Prepare   to Relax");
- 	delay(1000); //wait 1 second for patient to 
+	// screen.printToScreen("Prepare   to Relax");
+ // 	delay(1000); //wait 1 second for patient to 
 	screen.printToScreen("Relax");
    	delay(1000); //wait for a second before we actually start sampling
 
@@ -104,8 +104,8 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 	 }
 
 	 _averageMin /=_numberSamples;
- 	screen.printToScreen("Prepare   to        Contract");
-   	delay(2000);                
+ 	// screen.printToScreen("Prepare   to        Contract");
+  //  	delay(2000);                
 	screen.printToScreen("Contract  Fully");
 
   	_numberSamples = 0;
@@ -120,7 +120,7 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 	}
 
 	_averageMax /=_numberSamples;
-	screen.printToScreen("");
+	//screen.printToScreen("");
 	delay(1500);
 
 	struct candidate{ //create struct for 10 candidate thresholds, of whoch 1 will be chosen at the end
@@ -218,7 +218,7 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 	delay(3000);
 
 	screen.printToScreen("Done");
-   	return 1000;
+   	return threshold;
 }
 
 //helper method that allows us to print to the graph of the Arduino Serial Monitor
