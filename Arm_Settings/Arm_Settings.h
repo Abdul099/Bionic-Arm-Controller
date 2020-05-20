@@ -34,7 +34,7 @@
 
 //Calibration Settings
 #define NUM_CONTRACTIONS 10 // number of contractions needed for advanced calibration mode
-#define SIZE_TRAININGDATA 50 //max 70
+#define SIZE_TRAININGDATA 30 //max 70
 // other settings 
 
 #endif

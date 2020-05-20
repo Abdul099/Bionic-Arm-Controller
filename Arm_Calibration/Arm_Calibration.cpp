@@ -69,7 +69,7 @@ int Arm_Calibration::Calibrate(int samples)
 
 	_averageMax /=_numberSamples;
 	int threshold = _averageMin + 0.2 * (_averageMax - _averageMin); //assign threshold at 20% within the range
-	
+
 	screen.printToScreen(" Computing Results");
   	delay(500);
 	screen.printToScreen("Min", _averageMin);
@@ -125,7 +125,8 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 
 	struct candidate{ //create struct for 10 candidate thresholds, of whoch 1 will be chosen at the end
 		unsigned int threshVal : 10;
-		unsigned int score : 6;
+		unsigned int score : 6; //true positive
+		unsigned int falsepos : 6; //false positive
 	};
 
 	candidate candidates[10];
@@ -134,6 +135,7 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 	for (int i = 0; i<10; i++){
 		candidates[i].threshVal = _averageMin+((i)*(_averageMax - _averageMin))/10;//in increments of 10% starting at averageMin
 		candidates[i].score = 0;//initialize scores with zeros
+		candidates[i].falsepos = 0;
 	}
 
 	for (int i = 0; i<SIZE_TRAININGDATA; i++){
@@ -156,27 +158,47 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 				if(!added && (trainingData[j]*4)>candidates[i].threshVal){ //decompress the value from training data and compare it
 					candidates[i].score++;
 					added = 1;
-					Serial.print(i);
-					Serial.println("added");
+					// Serial.print(i);
+					// Serial.println("added");
 				}
 			}
 		}
 
-		screen.printToScreen("Wait");
-		delay(800);
+		screen.printToScreen("Relax");
+		delay(500); //allow for patient to relax
+
+		for(int i =0; i<SIZE_TRAININGDATA; i++){//fill each datapoint in trainingData
+			delay(50);
+			_amplitude = analogRead(_emg_pin);
+			printToLaptop(_amplitude);
+			trainingData[i] = _amplitude/4; //compress the 10 bit ADC reading into an 8bit in order to store it
+		}
+
+		for(int i = 0; i<10; i++){//for each candidate
+			bool added = 0;
+			for(int j = 0; j<SIZE_TRAININGDATA; j++){//for each datapoint in trainingData
+				if(!added && (trainingData[j]*4)>candidates[i].threshVal){ //decompress the value from training data and compare it
+					candidates[i].falsepos++;
+					added = 1;
+				}
+			}
+		}
     }
 
 	free(trainingData);
-	int selectedIndex;
+	int selectedIndex = 2; //default value
 
-	// for (int i=0; i<10; i++){
-	// 	Serial.print(i);
-	// 	Serial.print(": ");
-	// 	Serial.println(candidates[i].score);
-	// }
+	for (int i=0; i<10; i++){
+		Serial.print(i);
+		Serial.print(": ");
+		Serial.print("True positive:");
+		Serial.print(candidates[i].score);
+		Serial.print("  False positive:");
+		Serial.println(candidates[i].falsepos);
+	}
 
 	for(int i=9; i>0; i--){ 
-		if(candidates[i].score>=8){ // aim at capturing 80 percent of contractions
+		if(candidates[i].score>=8 && candidates[i].falsepos<=3){ // aim at capturing 80 percent of contractions with less than 30% false positive
 			selectedIndex = i;
 			break;
 		}
