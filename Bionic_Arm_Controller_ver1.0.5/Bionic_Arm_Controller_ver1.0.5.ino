@@ -1,9 +1,9 @@
 
 /*
-  Project Name: Bionic Arm Controller ver 1.0.3
+  Project Name: Bionic Arm Controller ver 1.0.5
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: May 12, 2020
+  Last Updated: May 22, 2020
   Description: Simplified program that receives emg input via analog pin and outputs PWM signals to 3 servo motors. An all-or-none basis is used to drive the control,
                where a signal below a certain threshold causes the arm to open and a signal above the threshold causes the arm to close. The threshold is determined
                through calibration, which is done through the Arm_Calibration library.
@@ -17,8 +17,10 @@
 #include <Arm_Servo.h>
 #include <Arm_Demo.h>
 
-int amp1; 
+int amp1;
 int thresh;
+int steadythresh;
+bool opened = 1;
 Arm_Calibration Calibrate = Arm_Calibration();
 Arm_Servo servo = Arm_Servo();
 Arm_Demo demo = Arm_Demo();
@@ -26,10 +28,13 @@ Arm_Demo demo = Arm_Demo();
 void setup() {
   Wire.begin();
   Serial.begin(9600);
-  thresh = Calibrate.CalibrateAdvanced(200);
+  thresh = Calibrate.CalibrateAdvanced(&steadythresh);
+  Serial.print("This is thresh: ");
+  Serial.println(thresh);
+  delay(1000);
   //thresh = 200;
   servo.setup();
-  demo.runDemo();
+  //demo.runDemo();
 }
 
 void loop() {
@@ -39,17 +44,26 @@ void loop() {
   Serial.print(0);
   Serial.print(" ");
   Serial.println(amp1);//print the amplitude to the graph
-  
-  if (amp1 > thresh) { //close the arm
-    servo.closeFinger(thumbServo);
-    servo.closeFinger(pinkyServo);
-    servo.closeFinger(indexServo);
-    delay(flag_duration);
+  if (opened) {
+    if (amp1 > thresh) { //close the arm
+      servo.closeFinger(thumbServo);
+      servo.closeFinger(pinkyServo);
+      servo.closeFinger(indexServo);
+      delay(flag_duration);
+      opened = 0;
+    }
+    else delay(del); //keep arm open
   }
-  else { //open the arm
-    servo.openFinger(thumbServo);
-    servo.openFinger(pinkyServo);
-    servo.openFinger(indexServo);
-    delay(del);
+  else { //if arm is closed
+    if (amp1 < steadythresh) { //open the arm
+      servo.openFinger(thumbServo);
+      servo.openFinger(pinkyServo);
+      servo.openFinger(indexServo);
+      delay(del);
+      opened = 1;
+    }
+    else { //keep the arm closed
+      delay(del);
+    }
   }
 }

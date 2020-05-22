@@ -19,6 +19,7 @@
 
 int amp1; 
 int thresh;
+int steadyClose; 
 Arm_Calibration Calibrate = Arm_Calibration();
 Arm_Servo servo = Arm_Servo();
 Arm_Demo demo = Arm_Demo();
@@ -26,8 +27,9 @@ Arm_Demo demo = Arm_Demo();
 void setup() {
   Wire.begin();
   Serial.begin(9600);
-  thresh = Calibrate.CalibrateAdvanced(200);
-  servo.setup();
+  thresh = Calibrate.CalibrateAdvanced(&steadyClose);
+  Serial.println("Steady:");
+  Serial.println(steadyClose);
 }
 void loop(){
 }

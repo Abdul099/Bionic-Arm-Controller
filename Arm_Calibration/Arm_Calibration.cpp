@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: May 18, 2020
+  Last Updated: May 22, 2020
 */
 #include <Arduino.h>
 #include <Arm_Calibration.h>
@@ -15,21 +15,21 @@ Arm_Calibration::Arm_Calibration()
 {
 	_emg_pin = A0;
 	_averageMin = 0;
-	_averageMax = 0;
+	_peak = 0;
 }
 
 Arm_Calibration::Arm_Calibration(int pin)
 {
 	_emg_pin = pin;
 	_averageMin = 0;
-	_averageMax = 0;
+	_peak = 0;
 }
 
 /*basic calibrate function used for quick calibration
 Finds average resting state and average contracting state 
 Assigns a threshold at 20% inside the range between both averages
 */
-int Arm_Calibration::Calibrate(int samples)
+int Arm_Calibration::Calibrate()
 {
 	Arm_Screen screen = Arm_Screen();
 	screen.prepare();
@@ -57,24 +57,23 @@ int Arm_Calibration::Calibrate(int samples)
 	screen.printToScreen(" Contract   Fully");
 
   	_numberSamples = 0;
-  	_averageMax = 0;
+  	_peak = 0;
 
    	while (_numberSamples < samples) {  //rest for 10 seconds to find the max value
   		delay(10);
     	_amplitude = analogRead(_emg_pin);
 		printToLaptop(_amplitude);  //print the amplitude to the graph
-     	_averageMax += _amplitude;
+     	if(_amplitude >= _peak) _peak = _amplitude;
     	_numberSamples++;
 	}
 
-	_averageMax /=_numberSamples;
-	int threshold = _averageMin + 0.2 * (_averageMax - _averageMin); //assign threshold at 20% within the range
+	int threshold = _averageMin + 0.2 * (_peak - _averageMin); //assign threshold at 20% within the range
 
 	screen.printToScreen(" Computing Results");
   	delay(500);
 	screen.printToScreen("Min", _averageMin);
 	delay(1000);
-	screen.printToScreen("MAX:", _averageMax);
+	screen.printToScreen("MAX:", _peak);
 	delay(1000);
 	screen.printToScreen("Thresh", threshold);
 	delay(2000);
@@ -83,7 +82,7 @@ int Arm_Calibration::Calibrate(int samples)
 }
 
 //Advanced version of calibrate involving resampling to determine a value for the threshold
-int Arm_Calibration::CalibrateAdvanced(int samples)
+int Arm_Calibration::CalibrateAdvanced(int* steadyclose)
 {
 	Arm_Screen screen = Arm_Screen();
 	screen.prepare();
@@ -109,17 +108,16 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 	screen.printToScreen("Contract  Fully");
 
   	_numberSamples = 0;
-  	_averageMax = 0;
+  	_peak = 0;
 
    	while (_numberSamples < samples) {  //rest for 10 seconds to find the max value
   		delay(10);
     	_amplitude = analogRead(_emg_pin);
 		printToLaptop(_amplitude);  //print the amplitude to the graph
-     	_averageMax += _amplitude;
+     	if(_amplitude >= _peak) _peak = _amplitude;
     	_numberSamples++;
 	}
 
-	_averageMax /=_numberSamples;
 	//screen.printToScreen("");
 	delay(1500);
 
@@ -133,7 +131,7 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
     uint8_t* trainingData = (uint8_t*) malloc(SIZE_TRAININGDATA*sizeof(uint8_t));
     
 	for (int i = 0; i<10; i++){
-		candidates[i].threshVal = _averageMin+((i)*(_averageMax - _averageMin))/10;//in increments of 10% starting at averageMin
+		candidates[i].threshVal = _averageMin+((i)*(_peak - _averageMin))/10;//in increments of 10% starting at averageMin
 		candidates[i].score = 0;//initialize scores with zeros
 		candidates[i].falsepos = 0;
 	}
@@ -205,12 +203,15 @@ int Arm_Calibration::CalibrateAdvanced(int samples)
 	}
 
     int threshold = candidates[selectedIndex].threshVal;
+    
+    if(selectedIndex>=4) *steadyclose = candidates[selectedIndex-4].threshVal;
+    else *steadyclose = candidates[1].threshVal;
 
     screen.printToScreen("Results:");
    	delay(500);
     screen.printToScreen("Min", _averageMin);
     delay(2000);
-    screen.printToScreen("MAX", _averageMax);
+    screen.printToScreen("Peak", _peak);
     delay(2000);
     screen.printToScreen("Index     Chosen", selectedIndex);
 	delay(3000);
