@@ -36,6 +36,10 @@
 #define samples 200
 #define NUM_CONTRACTIONS 10 // number of contractions needed for advanced calibration mode
 #define SIZE_TRAININGDATA 25 //max 70
+//sampler settings
+#define THRESHOLD_TOLERENCE 2
+#define THRESHOLD_TOLERENCE2 20
+
 // other settings 
 
 #endif

@@ -1,6 +1,6 @@
 
 /*
-  Project Name: Bionic Arm Controller ver 1.0.5
+  Project Name: Bionic Arm Controller ver 1.0.6
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
   Last Updated: May 22, 2020
@@ -16,6 +16,7 @@
 #include <Adafruit_GFX.h>
 #include <Arm_Servo.h>
 #include <Arm_Demo.h>
+#include <Arm_Sampler.h>
 
 int amp1;
 int thresh;
@@ -24,13 +25,14 @@ bool opened = 1;
 Arm_Calibration Calibrate = Arm_Calibration();
 Arm_Servo servo = Arm_Servo();
 Arm_Demo demo = Arm_Demo();
+Arm_Sampler sampler = Arm_Sampler();
 
 void setup() {
   Wire.begin();
   Serial.begin(9600);
   thresh = Calibrate.CalibrateAdvanced(&steadythresh);
-  Serial.print("This is thresh: ");
-  Serial.println(thresh);
+  Serial.print("This is lowthresh: ");
+  Serial.println(steadythresh);
   delay(1000);
   //thresh = 200;
   servo.setup();
@@ -39,31 +41,23 @@ void setup() {
 
 void loop() {
   amp1 = analogRead(A0);//we start by reading the signal value from the emg sensor --> assign this value to amp
-  Serial.print(1000);
-  Serial.print(" ");
-  Serial.print(0);
-  Serial.print(" ");
+//  Serial.print(1000);
+//  Serial.print(" ");
+//  Serial.print(0);
+//  Serial.print(" ");
   Serial.println(amp1);//print the amplitude to the graph
-  if (opened) {
-    if (amp1 > thresh) { //close the arm
-      servo.closeFinger(thumbServo);
-      servo.closeFinger(pinkyServo);
-      servo.closeFinger(indexServo);
-      delay(flag_duration);
-      opened = 0;
-    }
-    else delay(del); //keep arm open
-  }
-  else { //if arm is closed
-    if (amp1 < steadythresh) { //open the arm
+  opened = sampler.registerSample(thresh, steadythresh);
+  Serial.println(opened);
+  if(opened==1){
       servo.openFinger(thumbServo);
       servo.openFinger(pinkyServo);
       servo.openFinger(indexServo);
+      delay(100);
+  }
+  else{
+      servo.closeFinger(thumbServo);
+      servo.closeFinger(pinkyServo);
+      servo.closeFinger(indexServo);
       delay(del);
-      opened = 1;
-    }
-    else { //keep the arm closed
-      delay(del);
-    }
   }
 }
