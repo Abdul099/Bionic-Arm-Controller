@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: May 22, 2020
+  Last Updated: May 25, 2020
 
 */
 
@@ -19,10 +19,9 @@ class Arm_Calibration
 {
 	private: 
 		int _amplitude;
-		int _emg_pin;
+		uint8_t _emg_pin;
 		long int _averageMin;
 		int _peak;
-		int _numberSamples;
 		void printToLaptop(int val);
 
 	public:

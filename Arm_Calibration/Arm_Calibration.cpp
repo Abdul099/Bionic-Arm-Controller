@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: May 22, 2020
+  Last Updated: May 25, 2020
 */
 #include <Arduino.h>
 #include <Arm_Calibration.h>
@@ -40,32 +40,27 @@ int Arm_Calibration::Calibrate()
 	screen.printToScreen("  Relax");
    	delay(1000); //wait for a second before we actually start sampling
 
-   	_numberSamples = 0;
    	_averageMin = 0;
-  
-  	while (_numberSamples < samples) {  ///take samples at 100 HZ ~ 10s
+  	
+  	for (int i = 0; i< samples; i++){
   		delay(10);
-     	_amplitude = analogRead(_emg_pin);
-	 	printToLaptop(_amplitude);    //print the amplitude to the graph
+  		_amplitude = analogRead(_emg_pin);
+	 	Serial.print(_amplitude);    //print the amplitude to the graph
     	_averageMin += _amplitude;
-    	_numberSamples++;
-	 }
+  	}
 
-	 _averageMin /=_numberSamples;
+	 _averageMin /=samples;
  	screen.printToScreen("Prepare    to      Contract");
    	delay(2000);                
 	screen.printToScreen(" Contract   Fully");
 
-  	_numberSamples = 0;
   	_peak = 0;
 
-   	while (_numberSamples < samples) {  //rest for 10 seconds to find the max value
-  		delay(10);
-    	_amplitude = analogRead(_emg_pin);
-		printToLaptop(_amplitude);  //print the amplitude to the graph
-     	if(_amplitude >= _peak) _peak = _amplitude;
-    	_numberSamples++;
-	}
+  	for (int i = 0; i< samples; i++){
+  		_amplitude = analogRead(_emg_pin);
+	 	Serial.print(_amplitude);    //print the amplitude to the graph
+    	if(_amplitude >= _peak) _peak = _amplitude;
+  	}
 
 	int threshold = _averageMin + 0.2 * (_peak - _averageMin); //assign threshold at 20% within the range
 
@@ -91,47 +86,42 @@ int Arm_Calibration::CalibrateAdvanced(int* steadyclose)
 	screen.printToScreen("Relax");
    	delay(1000); //wait for a second before we actually start sampling
 
-   	_numberSamples = 0;
    	_averageMin = 0;
   
-  	while (_numberSamples < samples) {  ///take samples at 100 HZ ~ 10s
+  	for (int i = 0; i< samples; i++){
   		delay(10);
-     	_amplitude = analogRead(_emg_pin);
+  		_amplitude = analogRead(_emg_pin);
 	 	printToLaptop(_amplitude);    //print the amplitude to the graph
     	_averageMin += _amplitude;
-    	_numberSamples++;
-	 }
+  	}
 
-	 _averageMin /=_numberSamples;
+	 _averageMin = _averageMin/(samples);
  	// screen.printToScreen("Prepare   to        Contract");
   //  	delay(2000);                
 	screen.printToScreen("Contract  Fully");
 
-  	_numberSamples = 0;
   	_peak = 0;
 
-   	while (_numberSamples < samples) {  //rest for 10 seconds to find the max value
-  		delay(10);
-    	_amplitude = analogRead(_emg_pin);
-		printToLaptop(_amplitude);  //print the amplitude to the graph
-     	if(_amplitude >= _peak) _peak = _amplitude;
-    	_numberSamples++;
-	}
+  	for (int i = 0; i< samples; i++){
+  		_amplitude = analogRead(_emg_pin);
+	 	printToLaptop(_amplitude);    //print the amplitude to the graph
+    	if(_amplitude >= _peak) _peak = _amplitude;
+  	}
 
 	//screen.printToScreen("");
 	delay(1500);
 
 	struct candidate{ //create struct for 10 candidate thresholds, of whoch 1 will be chosen at the end
 		unsigned int threshVal : 10;
-		unsigned int score : 6; //true positive
-		unsigned int falsepos : 6; //false positive
+		unsigned int score : 6; //true positive score
+		unsigned int falsepos : 6; //false positive score
 	};
 
 	candidate candidates[10];
-    uint8_t* trainingData = (uint8_t*) malloc(SIZE_TRAININGDATA*sizeof(uint8_t));
+    uint8_t* trainingData = (uint8_t*) malloc(SIZE_TRAININGDATA*sizeof(uint8_t)); //array used to store sampled data points.
     
 	for (int i = 0; i<10; i++){
-		candidates[i].threshVal = _averageMin+((i)*(_peak - _averageMin))/10;//in increments of 10% starting at averageMin
+		candidates[i].threshVal = _averageMin+((i)*(_peak - _averageMin))/10;//assign candidate values in increments of 10% starting at averageMin
 		candidates[i].score = 0;//initialize scores with zeros
 		candidates[i].falsepos = 0;
 	}
@@ -156,8 +146,6 @@ int Arm_Calibration::CalibrateAdvanced(int* steadyclose)
 				if(!added && (trainingData[j]*4)>candidates[i].threshVal){ //decompress the value from training data and compare it
 					candidates[i].score++;
 					added = 1;
-					// Serial.print(i);
-					// Serial.println("added");
 				}
 			}
 		}
@@ -188,7 +176,6 @@ int Arm_Calibration::CalibrateAdvanced(int* steadyclose)
 
 	for (int i=0; i<10; i++){
 		Serial.print(i);
-		Serial.print(": ");
 		Serial.print("True positive:");
 		Serial.print(candidates[i].score);
 		Serial.print("  False positive:");
@@ -205,7 +192,7 @@ int Arm_Calibration::CalibrateAdvanced(int* steadyclose)
     int threshold = candidates[selectedIndex].threshVal;
     
     if(selectedIndex>=4) *steadyclose = candidates[selectedIndex-4].threshVal;
-    else *steadyclose = candidates[1].threshVal;
+    else *steadyclose = (candidates[1].threshVal+_averageMin)/2; //change the pointer value of the lower threshold
 
     screen.printToScreen("Results:");
    	delay(500);
@@ -219,10 +206,10 @@ int Arm_Calibration::CalibrateAdvanced(int* steadyclose)
 	delay(3000);
 
 	screen.printToScreen("Done");
-   	return threshold;
+   	return threshold;//return the upper threshold
 }
 
-//helper method that allows us to print to the graph of the Arduino Serial Monitor
+// //helper method that allows us to print to the graph of the Arduino Serial Monitor
 void Arm_Calibration::printToLaptop(int val)
 {
     Serial.print(1000);

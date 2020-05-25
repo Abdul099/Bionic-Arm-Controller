@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: May 22, 2020
+  Last Updated: May 25, 2020
 
 */
 
@@ -38,7 +38,7 @@
 #define SIZE_TRAININGDATA 25 //max 70
 //sampler settings
 #define THRESHOLD_TOLERENCE 2
-#define THRESHOLD_TOLERENCE2 20
+#define THRESHOLD_TOLERENCE2 15
 
 // other settings 
 
