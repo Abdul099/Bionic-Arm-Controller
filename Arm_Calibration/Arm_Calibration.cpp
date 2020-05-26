@@ -205,6 +205,13 @@ int Arm_Calibration::CalibrateAdvanced(int* steadyclose)
 	screen.printToScreen("Thresh",threshold);
 	delay(3000);
 
+	int calscore = 0; 
+	calscore += 6*(candidates[selectedIndex].score - candidates[selectedIndex].falsepos);
+	if(selectedIndex>0)calscore += 2*(candidates[selectedIndex-1].score - candidates[selectedIndex-1].falsepos);
+	if(selectedIndex<9)calscore += 2*(candidates[selectedIndex+1].score - candidates[selectedIndex+1].falsepos);
+	Serial.print("Calibration score: ");
+	Serial.println(calscore); //max 100
+
 	screen.printToScreen("Done");
    	return threshold;//return the upper threshold
 }
