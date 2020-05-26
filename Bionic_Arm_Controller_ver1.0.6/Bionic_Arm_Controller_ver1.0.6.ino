@@ -52,12 +52,14 @@ void loop() {
       servo.openFinger(thumbServo);
       servo.openFinger(pinkyServo);
       servo.openFinger(indexServo);
+      servo.openFinger(middleServo);
       delay(100);
   }
   else{
       servo.closeFinger(thumbServo);
       servo.closeFinger(pinkyServo);
       servo.closeFinger(indexServo);
+      servo.closeFinger(middleServo);
       delay(del);
   }
 }

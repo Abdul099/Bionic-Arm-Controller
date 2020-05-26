@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: May 25, 2020
+  Last Updated: May 26, 2020
 
 */
 
@@ -15,11 +15,12 @@
 
 //emg channel and servo settings
 #define NUM_CHANNELS 1
-#define NUM_SERVOS 3
+#define NUM_SERVOS 4 //max 4
 #define emgpin1 A0
 #define indexServo 0 //pin on servo shield
 #define thumbServo 1
-#define pinkyServo 2
+#define middleServo 2
+#define pinkyServo 3
 
 #define SERVOSPEED 10 
 
