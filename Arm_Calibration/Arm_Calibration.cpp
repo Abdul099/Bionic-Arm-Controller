@@ -129,10 +129,8 @@ int Arm_Calibration::CalibrateAdvanced(int* steadyclose)
 	for (int i = 0; i<SIZE_TRAININGDATA; i++){
   		trainingData[i] = 0; //initialize an array of zeros for trainingData
 	}
-	screen.setTextSize(1);
-	screen.printToScreen("Contract at the numbers");
+	screen.printToScreen("Contract  on        number");
 	delay(1000);
-	screen.setTextSize(2);
 
 	for(int c = 0; c<NUM_CONTRACTIONS; c++){ // for each contraction
 		screen.printToScreen(c+1);

@@ -2,7 +2,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: May 18, 2020
+  Last Updated: May 27, 2020
 
 */
 
@@ -24,9 +24,9 @@ class Arm_Screen
 		Arm_Screen();
 		void prepare();
 		void setTextSize(int size);
-		void printToScreen(String str);
+		void printToScreen(char str[]);
 		void printToScreen(int val);
-		void printToScreen(String s, int v);
+		void printToScreen(char s[], int v);
 		void clearScreen();
 };
 

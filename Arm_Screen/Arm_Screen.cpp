@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: May 26, 2020
+  Last Updated: May 27, 2020
 */
 #include <Arm_Screen.h>
 #include <Wire.h>
@@ -17,7 +17,6 @@ Arm_Screen::Arm_Screen()
 
 void Arm_Screen::prepare()
 {
-	//Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 	display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
 	display.clearDisplay();
 	display.setTextSize(2);   
@@ -30,13 +29,10 @@ void Arm_Screen::setTextSize(int size)
 	display.setTextSize(size);
 }
 
-void Arm_Screen::printToScreen(String str)
+void Arm_Screen::printToScreen(char str[])
 {
-	//Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-	//display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
-	String cpy = str;
-	display.clearDisplay();
-	//display.setTextSize(2);   
+	char *cpy = str;
+	display.clearDisplay(); 
     display.setTextColor(WHITE); 
 	display.setCursor(0, 0);
 	display.println(cpy);
@@ -45,21 +41,17 @@ void Arm_Screen::printToScreen(String str)
 
 void Arm_Screen::printToScreen(int val)
 {
-	// Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-	// display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
-	display.clearDisplay();
-	//display.setTextSize(2);   
+	display.clearDisplay();  
     display.setTextColor(WHITE); 
 	display.setCursor(0, 0);
 	display.println(val);
 	display.display();
 }
 
-void Arm_Screen::printToScreen(String s, int v)
+void Arm_Screen::printToScreen(char s[], int v)
 {
-	String c = s;
-	display.clearDisplay();
-	//display.setTextSize(2);   
+	char *c = s;
+	display.clearDisplay(); 
     display.setTextColor(WHITE); 
 	display.setCursor(0, 0);
 	display.println(c);

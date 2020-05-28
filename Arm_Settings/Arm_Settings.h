@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: May 26, 2020
+  Last Updated: May 27, 2020
 
 */
 
@@ -17,7 +17,7 @@
 #define NUM_CHANNELS 1
 #define NUM_SERVOS 4 //max 4
 #define emgpin1 A0
-#define indexServo 0 //pin on servo shield
+#define indexServo 0 //pin on servo relay module
 #define thumbServo 1
 #define middleServo 2
 #define pinkyServo 3
@@ -34,8 +34,8 @@
 //Calibration Settings
 #define samples 200
 #define NUM_CONTRACTIONS 10 // number of contractions needed for advanced calibration mode
-#define SIZE_TRAININGDATA 30 //max 40
-#define TRAINING_DELAY 50 //sampling period for trainingData
+#define SIZE_TRAININGDATA 100 //max 100
+#define TRAINING_DELAY 20 //sampling period for trainingData
 
 //sampler settings
 #define THRESHOLD_TOLERENCE 2 //number of successive highs required to initiate a 'close hand' order
