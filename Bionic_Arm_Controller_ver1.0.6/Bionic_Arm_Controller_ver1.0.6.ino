@@ -31,7 +31,7 @@ void setup() {
   Wire.begin();
   Serial.begin(9600);
   thresh = Calibrate.CalibrateAdvanced(&steadythresh);
-  Serial.print("This is lowthresh: ");
+  Serial.print("Lowthresh: ");
   Serial.println(steadythresh);
   delay(1000);
   //thresh = 200;
@@ -41,19 +41,14 @@ void setup() {
 
 void loop() {
   amp1 = analogRead(A0);//we start by reading the signal value from the emg sensor --> assign this value to amp
-//  Serial.print(1000);
-//  Serial.print(" ");
-//  Serial.print(0);
-//  Serial.print(" ");
   Serial.println(amp1);//print the amplitude to the graph
   opened = sampler.registerSample(thresh, steadythresh);
-  Serial.println(opened);
   if(opened==1){
       servo.openFinger(thumbServo);
       servo.openFinger(pinkyServo);
       servo.openFinger(indexServo);
       servo.openFinger(middleServo);
-      delay(100);
+      delay(FLAG_DURATION);
   }
   else{
       servo.closeFinger(thumbServo);

@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: May 22, 2020
+  Last Updated: May 27, 2020
 */
 
 #include <Arm_Sampler.h>
@@ -19,13 +19,11 @@ bool Arm_Sampler::registerSample(int threshhigh, int threshlow)
 	int signal = analogRead(emgpin1);
 
 	if(_open){
-		Serial.println("open");
 		if(signal>=threshhigh) _count++;
 		else _count = 0; //reset counter because the strak is broken
 		if(_count>=THRESHOLD_TOLERENCE){ //if enough readings have been registered above threshold 
 			_count = 0; //reset the count variable
 			_open = 0; //close the arm
-			Serial.println("inside");
 			return 0; //close the arm
 		}
 		else return 1;//remain open

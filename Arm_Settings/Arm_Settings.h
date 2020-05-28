@@ -22,10 +22,8 @@
 #define middleServo 2
 #define pinkyServo 3
 
-#define SERVOSPEED 10 
-
 //delay intervals
-#define flag_duration 1000
+#define FLAG_DURATION 100
 #define del 50
 
 //lcd screen settings
@@ -36,10 +34,12 @@
 //Calibration Settings
 #define samples 200
 #define NUM_CONTRACTIONS 10 // number of contractions needed for advanced calibration mode
-#define SIZE_TRAININGDATA 25 //max 70
+#define SIZE_TRAININGDATA 30 //max 40
+#define TRAINING_DELAY 50 //sampling period for trainingData
+
 //sampler settings
-#define THRESHOLD_TOLERENCE 2
-#define THRESHOLD_TOLERENCE2 15
+#define THRESHOLD_TOLERENCE 2 //number of successive highs required to initiate a 'close hand' order
+#define THRESHOLD_TOLERENCE2 15 //number of successive lows required to initiate an 'open hand' order
 
 // other settings 
 

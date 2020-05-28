@@ -98,7 +98,7 @@ int Arm_Calibration::CalibrateAdvanced(int* steadyclose)
 	 _averageMin = _averageMin/(samples);
  	// screen.printToScreen("Prepare   to        Contract");
   //  	delay(2000);                
-	screen.printToScreen("Contract  Fully");
+	screen.printToScreen("Contract");
 
   	_peak = 0;
 
@@ -129,12 +129,16 @@ int Arm_Calibration::CalibrateAdvanced(int* steadyclose)
 	for (int i = 0; i<SIZE_TRAININGDATA; i++){
   		trainingData[i] = 0; //initialize an array of zeros for trainingData
 	}
+	screen.setTextSize(1);
+	screen.printToScreen("Contract at the numbers");
+	delay(1000);
+	screen.setTextSize(2);
 
 	for(int c = 0; c<NUM_CONTRACTIONS; c++){ // for each contraction
-		screen.printToScreen("Contract", c+1);
+		screen.printToScreen(c+1);
 
 		for(int i =0; i<SIZE_TRAININGDATA; i++){//fill each datapoint in trainingData
-			delay(50);
+			delay(TRAINING_DELAY);
 			_amplitude = analogRead(_emg_pin);
 			printToLaptop(_amplitude);
 			trainingData[i] = _amplitude/4; //compress the 10 bit ADC reading into an 8bit in order to store it
@@ -154,7 +158,7 @@ int Arm_Calibration::CalibrateAdvanced(int* steadyclose)
 		delay(500); //allow for patient to relax
 
 		for(int i =0; i<SIZE_TRAININGDATA; i++){//fill each datapoint in trainingData
-			delay(50);
+			delay(TRAINING_DELAY);
 			_amplitude = analogRead(_emg_pin);
 			printToLaptop(_amplitude);
 			trainingData[i] = _amplitude/4; //compress the 10 bit ADC reading into an 8bit in order to store it
@@ -176,9 +180,9 @@ int Arm_Calibration::CalibrateAdvanced(int* steadyclose)
 
 	for (int i=0; i<10; i++){
 		Serial.print(i);
-		Serial.print("True positive:");
+		Serial.print(F(" True positive:"));
 		Serial.print(candidates[i].score);
-		Serial.print("  False positive:");
+		Serial.print(F("  False positive:"));
 		Serial.println(candidates[i].falsepos);
 	}
 
@@ -191,8 +195,7 @@ int Arm_Calibration::CalibrateAdvanced(int* steadyclose)
 
     int threshold = candidates[selectedIndex].threshVal;
     
-    if(selectedIndex>=4) *steadyclose = candidates[selectedIndex-4].threshVal;
-    else *steadyclose = (candidates[1].threshVal+_averageMin)/2; //change the pointer value of the lower threshold
+    *steadyclose = (candidates[1].threshVal+2*_averageMin)/3; //change the pointer value of the lower threshold
 
     screen.printToScreen("Results:");
    	delay(500);

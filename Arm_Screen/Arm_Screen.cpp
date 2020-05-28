@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: May 11, 2020
+  Last Updated: May 26, 2020
 */
 #include <Arm_Screen.h>
 #include <Wire.h>
@@ -36,7 +36,7 @@ void Arm_Screen::printToScreen(String str)
 	//display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
 	String cpy = str;
 	display.clearDisplay();
-	display.setTextSize(2);   
+	//display.setTextSize(2);   
     display.setTextColor(WHITE); 
 	display.setCursor(0, 0);
 	display.println(cpy);
@@ -48,7 +48,7 @@ void Arm_Screen::printToScreen(int val)
 	// Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 	// display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
 	display.clearDisplay();
-	display.setTextSize(2);   
+	//display.setTextSize(2);   
     display.setTextColor(WHITE); 
 	display.setCursor(0, 0);
 	display.println(val);
@@ -57,18 +57,15 @@ void Arm_Screen::printToScreen(int val)
 
 void Arm_Screen::printToScreen(String s, int v)
 {
-   // display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-	//display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
 	String c = s;
 	display.clearDisplay();
-	display.setTextSize(2);   
+	//display.setTextSize(2);   
     display.setTextColor(WHITE); 
 	display.setCursor(0, 0);
 	display.println(c);
 	display.println(v);
 	display.display();
 }
-
 
 void Arm_Screen::clearScreen()
 {

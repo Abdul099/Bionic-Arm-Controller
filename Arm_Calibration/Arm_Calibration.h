@@ -23,6 +23,7 @@ class Arm_Calibration
 		long int _averageMin;
 		int _peak;
 		void printToLaptop(int val);
+		//String _string;
 
 	public:
 		Arm_Calibration();
