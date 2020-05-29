@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: May 25, 2020
+  Last Updated: May 28, 2020
 */
 #include <Arduino.h>
 #include <Arm_Calibration.h>
@@ -96,6 +96,8 @@ int Arm_Calibration::CalibrateAdvanced(int* steadyclose)
   	}
 
 	 _averageMin = _averageMin/(samples);
+	// _tempAvgMin = _averageMin; 
+	 //_averageMin = 0;
  	// screen.printToScreen("Prepare   to        Contract");
   //  	delay(2000);                
 	screen.printToScreen("Contract");
@@ -158,6 +160,7 @@ int Arm_Calibration::CalibrateAdvanced(int* steadyclose)
 		for(int i =0; i<SIZE_TRAININGDATA; i++){//fill each datapoint in trainingData
 			delay(TRAINING_DELAY);
 			_amplitude = analogRead(_emg_pin);
+			//_averageMin += _amplitude;
 			printToLaptop(_amplitude);
 			trainingData[i] = _amplitude/4; //compress the 10 bit ADC reading into an 8bit in order to store it
 		}
@@ -172,7 +175,8 @@ int Arm_Calibration::CalibrateAdvanced(int* steadyclose)
 			}
 		}
     }
-
+    //_averageMin /=(samples*10);
+    //if(_averageMin - _tempAvgMin <20 || _tempAvgMin - _averageMin <20) _averageMin = _tempAvgMin;
 	free(trainingData);
 	int selectedIndex = 2; //default value
 
@@ -193,7 +197,8 @@ int Arm_Calibration::CalibrateAdvanced(int* steadyclose)
 
     int threshold = candidates[selectedIndex].threshVal;
     
-    *steadyclose = (candidates[1].threshVal+2*_averageMin)/3; //change the pointer value of the lower threshold
+
+    *steadyclose = (candidates[1].threshVal); //change the pointer value of the lower threshold
 
     screen.printToScreen("Results:");
    	delay(500);
