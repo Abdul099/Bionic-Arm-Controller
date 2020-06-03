@@ -20,6 +20,7 @@ class Arm_Sampler
 		int _pin;
 	public:
 		Arm_Sampler();
+		Arm_Sampler(int pin);
 		bool registerSample(int threshhigh, int threshlow);
 };
 

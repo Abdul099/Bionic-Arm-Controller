@@ -66,6 +66,8 @@ void Arm_Demo::fingerByFinger()
 {
 	servo.closeFinger(pinkyServo);
 	delay(_standardDelay*0.5);
+	servo.closeFinger(ringServo);
+	delay(_standardDelay*0.5);
 	servo.closeFinger(middleServo);
 	delay(_standardDelay*0.5);	
 	servo.closeFinger(indexServo);
@@ -73,6 +75,8 @@ void Arm_Demo::fingerByFinger()
 	servo.closeFinger(thumbServo);
 	delay(_standardDelay*0.5);	
 	servo.openFinger(pinkyServo);
+	delay(_standardDelay*0.5);
+	servo.openFinger(ringServo);
 	delay(_standardDelay*0.5);
 	servo.openFinger(middleServo);
 	delay(_standardDelay*0.5);
@@ -88,6 +92,7 @@ void Arm_Demo::thumbsUp()
 	servo.closeFinger(indexServo);
 	servo.closeFinger(pinkyServo);
 	servo.closeFinger(middleServo);
+	servo.closeFinger(ringServo);
 }
 
 void Arm_Demo::vSign()
@@ -96,6 +101,7 @@ void Arm_Demo::vSign()
 	servo.openFinger(middleServo);	
 	servo.closeFinger(thumbServo);
 	servo.closeFinger(pinkyServo);
+	servo.closeFinger(ringServo);
 }
 
 void Arm_Demo::gangsterSign()
@@ -104,4 +110,5 @@ void Arm_Demo::gangsterSign()
 	servo.openFinger(indexServo);
 	servo.closeFinger(middleServo);
 	servo.openFinger(pinkyServo);
+	servo.closeFinger(ringServo);
 }

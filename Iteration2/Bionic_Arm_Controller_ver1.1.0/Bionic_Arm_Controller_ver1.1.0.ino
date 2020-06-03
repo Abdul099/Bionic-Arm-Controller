@@ -1,10 +1,10 @@
 /*
-  Project Name: Bionic Arm Controller ver 1.1.1
+  Project Name: Bionic Arm Controller ver 1.1.0
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
   Last Updated: June 3, 2020
   Description: Control sketch that receives EMG input via 2 analog pins coming from 2 EMG channels and outputs PWM signals to 3 servo motors. The threshold for each channel is determined
-               through calibration, which is done through the Arm_Calibration library.
+               through calibration, which is done through the Arm_Calibration library. For this version, input from the second channel is collected but not utilized.
 */
 #include <Arm_Settings.h>
 #include <Wire.h>
@@ -28,7 +28,8 @@ Arm_Calibration Calibrate = Arm_Calibration(emgpin1);
 Arm_Calibration Calibrate2 = Arm_Calibration(emgpin2); 
 Arm_Servo servo = Arm_Servo();
 Arm_Demo demo = Arm_Demo();
-Arm_Sampler sampler = Arm_Sampler();
+Arm_Sampler sampler = Arm_Sampler(emgpin1);
+Arm_Sampler sampler2 = Arm_Sampler(emgpin2);
 
 void setup() {
   Wire.begin();
@@ -53,6 +54,7 @@ void loop() {
       servo.openFinger(pinkyServo);
       servo.openFinger(indexServo);
       servo.openFinger(middleServo);
+      servo.openFinger(ringServo);
       delay(CLOSED_DELAY);
   }
   else{
@@ -60,6 +62,7 @@ void loop() {
       servo.closeFinger(pinkyServo);
       servo.closeFinger(indexServo);
       servo.closeFinger(middleServo);
+      servo.closeFinger(ringServo);
       delay(OPEN_DELAY);
   }
 }

@@ -15,7 +15,7 @@
 
 //emg channel and servo settings
 #define NUM_CHANNELS 2
-#define NUM_SERVOS 4 //max 4
+#define NUM_SERVOS 5//max 5
 #define emgpin1 A0
 #define emgpin2 A1
 #define indexServo 0 //pin on servo relay module
