@@ -1,11 +1,12 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated:June 3, 2020
+  Last Updated:June 16, 2020
 */
 
 #include <Arm_Sampler.h>
 #include <Arm_Settings.h>
+#include "EMGFilters.h"
 
 //constructor
 Arm_Sampler::Arm_Sampler()
@@ -13,6 +14,8 @@ Arm_Sampler::Arm_Sampler()
 	_open = 1;
 	_count = 0;
 	_pin = A0;
+	sampleRate = SAMPLE_FREQ_1000HZ;
+	humFreq = NOTCH_FREQ_60HZ;
 }
 
 Arm_Sampler::Arm_Sampler(int pin)
@@ -47,6 +50,30 @@ bool Arm_Sampler::registerSample(int threshhigh, int threshlow)
 		}
 		else return 0; //keep closed
 	}
+}
+
+int Arm_Sampler::rawSample()
+{
+	read();
+	delay(10);
+}
+
+void Arm_Sampler::checkBelow(int val, byte duration){
+	short counter = duration; 
+	while(counter >0){
+		int reading = read();
+		if (reading<=val) counter--; 
+		else counter = duration; //reset the counter
+	}
+	delay(10);
+}
+
+int Arm_Sampler::read()
+{
+  	int Value = analogRead(_pin);
+  	int DataAfterFilter = myFilter.update(Value);
+  	int envlope = sq(DataAfterFilter);
+  	return envlope;
 }
 
 

@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: May 28, 2020
+  Last Updated: June 16, 2020
 
 */
 
@@ -14,6 +14,7 @@
 #include <Wire.h>
 #include <Arm_Settings.h>
 #include <Arm_Screen.h>
+#include <Arm_Sampler.h>
 
 class Arm_Calibration
 {
@@ -30,6 +31,7 @@ class Arm_Calibration
 		Arm_Calibration(int pin);
 		int Calibrate();
 		int CalibrateAdvanced(int* steadyclose);
+		int CalibrateDry(int* lowThresh, short* hold);
 };
 
 #endif
