@@ -6,7 +6,6 @@
 
 #include <Arm_Sampler.h>
 #include <Arm_Settings.h>
-#include "EMGFilters.h"
 
 //constructor
 Arm_Sampler::Arm_Sampler()
@@ -14,8 +13,7 @@ Arm_Sampler::Arm_Sampler()
 	_open = 1;
 	_count = 0;
 	_pin = A0;
-	sampleRate = SAMPLE_FREQ_1000HZ;
-	humFreq = NOTCH_FREQ_60HZ;
+	base = 0;
 }
 
 Arm_Sampler::Arm_Sampler(int pin)
@@ -23,6 +21,7 @@ Arm_Sampler::Arm_Sampler(int pin)
 	_open = 1;
 	_count = 0;
 	_pin = pin;
+	base = 0;
 }
 
 bool Arm_Sampler::registerSample(int threshhigh, int threshlow)
@@ -52,10 +51,12 @@ bool Arm_Sampler::registerSample(int threshhigh, int threshlow)
 	}
 }
 
-int Arm_Sampler::rawSample()
+int Arm_Sampler::simpleSample()
 {
-	read();
+	int sample = read();
 	delay(10);
+	Serial.println(sample);
+	return sample; 
 }
 
 void Arm_Sampler::checkBelow(int val, byte duration){
@@ -68,12 +69,22 @@ void Arm_Sampler::checkBelow(int val, byte duration){
 	delay(10);
 }
 
+void Arm_Sampler::updateBaseline(){
+  long avg = 0;
+  for(int i=0; i<100; i++){
+    avg+= analogRead(A0);
+    delay(10);
+  }
+  avg/=100;
+  base = avg;
+}
+
 int Arm_Sampler::read()
 {
-  	int Value = analogRead(_pin);
-  	int DataAfterFilter = myFilter.update(Value);
-  	int envlope = sq(DataAfterFilter);
-  	return envlope;
+  	int raw = analogRead(_pin);
+  	raw = abs(raw-base);
+  	raw = raw*raw; 
+  	return raw;
 }
 
 

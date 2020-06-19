@@ -229,19 +229,18 @@ int Arm_Calibration::CalibrateDry(int* lowThresh, short* hold)
 	Arm_Screen screen = Arm_Screen();
 	screen.prepare();
 	screen.printToScreen("Relax");
-   	delay(1000); //wait for a second before we actually start sampling
+	delay(500);
+   	sampler.updateBaseline();
+   	delay(500); //wait for a second before we actually start sampling
    	screen.printToScreen("Fix Electrode position");
-   	sampler.checkBelow(50, 30);//look for 30 consecutive readings below 50 to make sure the electrode is placed properly
-	screen.printToScreen("Relax");
-   	delay(2000); //wait for a second before we actually start sampling
-           
+   	delay(500);
+   	sampler.checkBelow(50, 30);//look for 30 consecutive readings below 50 to make sure the electrode is placed properly           
 	screen.printToScreen("Contract");
 
   	_peak = 0;
 
   	for (int i = 0; i< samples; i++){
-	  	_amplitude = sampler.rawSample();
-		 printToLaptop(_amplitude);    //print the amplitude to the graph
+	  	_amplitude = sampler.simpleSample();
 	    if(_amplitude >= _peak) _peak = _amplitude;
   	}
 
@@ -274,7 +273,7 @@ int Arm_Calibration::CalibrateDry(int* lowThresh, short* hold)
 
 		for(int i =0; i<SIZE_TRAININGDATA; i++){//fill each datapoint in trainingData
 			delay(TRAINING_DELAY);
-			_amplitude = sampler.rawSample();
+			_amplitude = sampler.simpleSample();
 			printToLaptop(_amplitude);
 			trainingData[i] = _amplitude/4; //compress the 10 bit ADC reading into an 8bit in order to store it
 		}
@@ -291,15 +290,14 @@ int Arm_Calibration::CalibrateDry(int* lowThresh, short* hold)
 		screen.printToScreen("Relax");
 		delay(500); //allow for patient to relax
     }
-    //_averageMin /=(samples*10);
-    //if(_averageMin - _tempAvgMin <20 || _tempAvgMin - _averageMin <20) _averageMin = _tempAvgMin;
+
 	free(trainingData);
 	int selectedIndex = 2; //default value
 
 	for (int i=0; i<10; i++){
 		Serial.print(i);
 		Serial.print(F(" True positive:"));
-		Serial.print(candidates[i].score);
+		Serial.println(candidates[i].score);
 	}
 
 	for(int i=9; i>0; i--){ 
@@ -325,10 +323,10 @@ int Arm_Calibration::CalibrateDry(int* lowThresh, short* hold)
 	delay(3000);
 
 	screen.printToScreen("Done");
-   	return threshold;//return the upper threshold
+   	return 100;//return the upper threshold
 }
 
-// //helper method that allows us to print to the graph of the Arduino Serial Monitor
+//helper method that allows us to print to the graph of the Arduino Serial Monitor
 void Arm_Calibration::printToLaptop(int val)
 {
     Serial.print(1000);

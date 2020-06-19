@@ -11,7 +11,6 @@
 
 #include <Arduino.h>
 #include <Arm_Settings.h>
-#include "EMGFilters.h"
 
 class Arm_Sampler
 {
@@ -19,15 +18,16 @@ class Arm_Sampler
 		bool _open;
 		uint8_t _count;
 		int _pin;
-		EMGFilters myFilter;
 		int sampleRate;
 		int humFreq;
 		int read();
+		int base; 
 	public:
 		Arm_Sampler();
 		Arm_Sampler(int pin);
+		void updateBaseline();
 		bool registerSample(int threshhigh, int threshlow);
-		int rawSample();
+		int simpleSample();
 		void checkBelow(int val, byte duration);
 };
 
