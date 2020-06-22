@@ -223,7 +223,7 @@ int Arm_Calibration::CalibrateAdvanced(int* steadyclose)
    	return threshold;//return the upper threshold
 }
 
-int Arm_Calibration::CalibrateDry(int* lowThresh, short* hold)
+int Arm_Calibration::CalibrateDry(int* lowThresh, short* hold, short* baseline)
 {
 	Arm_Sampler sampler = Arm_Sampler();
 	Arm_Screen screen = Arm_Screen();
@@ -231,6 +231,7 @@ int Arm_Calibration::CalibrateDry(int* lowThresh, short* hold)
 	screen.printToScreen("Relax");
 	delay(500);
    	sampler.updateBaseline();
+   	*baseline = sampler.getBaseline();
    	delay(500); //wait for a second before we actually start sampling
    	screen.printToScreen("Fix Electrode position");
    	delay(500);
@@ -297,6 +298,7 @@ int Arm_Calibration::CalibrateDry(int* lowThresh, short* hold)
 	for (int i=0; i<10; i++){
 		Serial.print(i);
 		Serial.print(F(" True positive:"));
+		Serial.print(candidates[i].threshVal);
 		Serial.println(candidates[i].score);
 	}
 
@@ -323,7 +325,8 @@ int Arm_Calibration::CalibrateDry(int* lowThresh, short* hold)
 	delay(3000);
 
 	screen.printToScreen("Done");
-   	return 100;//return the upper threshold
+
+   	return threshold;//return the upper threshold
 }
 
 //helper method that allows us to print to the graph of the Arduino Serial Monitor

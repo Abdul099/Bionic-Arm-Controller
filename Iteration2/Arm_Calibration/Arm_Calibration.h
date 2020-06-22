@@ -31,7 +31,7 @@ class Arm_Calibration
 		Arm_Calibration(int pin);
 		int Calibrate();
 		int CalibrateAdvanced(int* steadyclose);
-		int CalibrateDry(int* lowThresh, short* hold);
+		int CalibrateDry(int* lowThresh, short* hold, short* baseline);
 };
 
 #endif

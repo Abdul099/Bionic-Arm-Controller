@@ -19,7 +19,6 @@ class Arm_Sampler
 		uint8_t _count;
 		int _pin;
 		int sampleRate;
-		int humFreq;
 		int read();
 		int base; 
 	public:
@@ -29,6 +28,8 @@ class Arm_Sampler
 		bool registerSample(int threshhigh, int threshlow);
 		int simpleSample();
 		void checkBelow(int val, byte duration);
+		int getBaseline();
+		void setBaseline(short value);
 };
 
 #endif

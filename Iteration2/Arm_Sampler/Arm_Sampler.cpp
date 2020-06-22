@@ -83,8 +83,18 @@ int Arm_Sampler::read()
 {
   	int raw = analogRead(_pin);
   	raw = abs(raw-base);
-  	raw = raw*raw; 
+  	//raw = raw*raw; 
   	return raw;
+}
+
+void Arm_Sampler::setBaseline(short value)
+{
+	base = value;
+}
+
+int Arm_Sampler::getBaseline()
+{
+	return base; 
 }
 
 
