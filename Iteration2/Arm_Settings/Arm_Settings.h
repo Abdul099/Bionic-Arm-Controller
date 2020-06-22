@@ -1,13 +1,14 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: May 27, 2020
+  Last Updated: June 22, 2020
 
 */
 
 #ifndef Arm_Settings_h
 #define Arm_Settings_h
 
+#define LED_DEBUG_MODE true
 //servo PWM settings
 #define PWM_frequency 60
 #define SERVOMIN 230

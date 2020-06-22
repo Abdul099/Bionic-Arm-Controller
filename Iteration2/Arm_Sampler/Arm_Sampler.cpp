@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated:June 16, 2020
+  Last Updated:June 22, 2020
 */
 
 #include <Arm_Sampler.h>
@@ -24,10 +24,12 @@ Arm_Sampler::Arm_Sampler(int pin)
 	base = 0;
 }
 
-bool Arm_Sampler::registerSample(int threshhigh, int threshlow)
+byte Arm_Sampler::evaluateSample(int signal, int threshhigh, int threshlow)
 {
-	int signal = analogRead(_pin);
-
+	if(signal > 200){
+		_count = 0;
+		return 2; 
+	}
 	if(_open){
 		if(signal>=threshhigh) _count++;
 		else _count = 0; //reset counter because the strak is broken
@@ -55,6 +57,14 @@ int Arm_Sampler::simpleSample()
 {
 	int sample = read();
 	delay(10);
+	Serial.println(sample);
+	return sample; 
+}
+
+int Arm_Sampler::simpleSample(byte del)
+{
+	int sample = read();
+	delay(del);
 	Serial.println(sample);
 	return sample; 
 }

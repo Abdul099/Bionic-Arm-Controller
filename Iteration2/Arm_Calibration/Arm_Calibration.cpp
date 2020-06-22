@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: June 16, 2020
+  Last Updated: June 22, 2020
 */
 #include <Arduino.h>
 #include <Arm_Calibration.h>
