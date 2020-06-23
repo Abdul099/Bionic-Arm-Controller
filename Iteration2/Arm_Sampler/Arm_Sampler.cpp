@@ -26,7 +26,7 @@ Arm_Sampler::Arm_Sampler(int pin)
 
 byte Arm_Sampler::evaluateSample(int signal, int threshhigh, int threshlow)
 {
-	if(signal > 200){
+	if(signal > 300){
 		_count = 0;
 		return 2; 
 	}

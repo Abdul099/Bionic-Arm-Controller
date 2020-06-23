@@ -250,7 +250,7 @@ int Arm_Calibration::CalibrateDry(int* lowThresh, short* hold, short* baseline)
 	struct candidate{ //create struct for 10 candidate thresholds, of whoch 1 will be chosen at the end
 		unsigned int threshVal : 10;
 		unsigned int score : 6; //may add false positive score later on
-		byte hold; //tries to fit from the 
+		byte hold;  
 	};
 
 	candidate candidates[10];
@@ -299,6 +299,7 @@ int Arm_Calibration::CalibrateDry(int* lowThresh, short* hold, short* baseline)
 		Serial.print(i);
 		Serial.print(F(" True positive:"));
 		Serial.print(candidates[i].threshVal);
+		Serial.print(F("  "));
 		Serial.println(candidates[i].score);
 	}
 

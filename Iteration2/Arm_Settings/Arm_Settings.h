@@ -41,8 +41,8 @@
 #define TRAINING_DELAY 20 //sampling period for trainingData
 
 //sampler settings
-#define THRESHOLD_TOLERENCE 5 //number of successive highs required to initiate a 'close hand' order
-#define THRESHOLD_TOLERENCE2 10 //number of successive lows required to initiate an 'open hand' order
+#define THRESHOLD_TOLERENCE 2 //number of successive highs required to initiate a 'close hand' order
+#define THRESHOLD_TOLERENCE2 2 //number of successive lows required to initiate an 'open hand' order
 
 // other settings 
 
