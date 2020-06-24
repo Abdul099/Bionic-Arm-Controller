@@ -1,5 +1,5 @@
 /*
-  Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
+  Authors: Abdullatif Hassan, Theodore Janson
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
   Last Updated: June 22, 2020
 
@@ -11,6 +11,13 @@
 
 #include <Arduino.h>
 #include <Arm_Settings.h>
+#include "EMGFilters.h"
+ 
+ struct _buffer {
+  byte index;   
+  int window[buffer_arrayLength]; // Buffer window to rectify AC value: larger values yield less precise waveforms. 
+  int sum;     //Sum over the buffer window
+};
 
 class Arm_Sampler
 {
@@ -19,8 +26,12 @@ class Arm_Sampler
 		uint8_t _count;
 		int _pin;
 		int sampleRate;
-		int read();
 		int base; 
+		_buffer myBuffer;
+		int read();
+		void updateBuffer(_buffer& b, int val);
+		int averageBuffer(_buffer& b);
+
 	public:
 		Arm_Sampler();
 		Arm_Sampler(int pin);

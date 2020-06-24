@@ -37,7 +37,7 @@
 //Calibration Settings
 #define samples 200
 #define NUM_CONTRACTIONS 10 // number of contractions needed for advanced calibration mode
-#define SIZE_TRAININGDATA 80 //max 100
+#define SIZE_TRAININGDATA 20 //max 100
 #define TRAINING_DELAY 20 //sampling period for trainingData
 
 //sampler settings
@@ -45,5 +45,5 @@
 #define THRESHOLD_TOLERENCE2 2 //number of successive lows required to initiate an 'open hand' order
 
 // other settings 
-
+#define buffer_arrayLength 8
 #endif

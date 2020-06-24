@@ -1,8 +1,8 @@
 /*
-  Project Name: Bionic Arm Controller ver 1.0.6
+  Project Name: Bionic Arm Controller ver 1.2.1
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: June 22, 2020
+  Last Updated: June 23, 2020
   Description: Simplified program that receives emg input via analog pin and outputs PWM signals to 3 servo motors. An all-or-none basis is used to drive the control,
                where a signal below a certain threshold causes the arm to open and a signal above the threshold causes the arm to close. The threshold is determined
                through calibration, which is done through the Arm_Calibration library.
