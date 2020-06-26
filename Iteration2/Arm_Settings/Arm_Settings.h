@@ -43,7 +43,7 @@
 //sampler settings
 #define THRESHOLD_TOLERENCE 2 //number of successive highs required to initiate a 'close hand' order
 #define THRESHOLD_TOLERENCE2 2 //number of successive lows required to initiate an 'open hand' order
-
+#define HOLD 2
 // other settings 
 #define buffer_arrayLength 8
 #endif

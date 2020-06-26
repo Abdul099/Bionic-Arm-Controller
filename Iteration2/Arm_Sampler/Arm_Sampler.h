@@ -24,6 +24,8 @@ class Arm_Sampler
 	private: 
 		bool _open;
 		uint8_t _count;
+		int previousState;
+		int currentState; 
 		int _pin;
 		int sampleRate;
 		int base; 

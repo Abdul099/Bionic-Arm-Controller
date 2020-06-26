@@ -15,6 +15,8 @@ Arm_Sampler::Arm_Sampler()
 	_open = 1;
 	_count = 0;
 	_pin = A0;
+	previousState = 0;
+	currentState = 0;
 	base = 0;
 	myBuffer.sum = 0;
 	myBuffer.index = 0;
@@ -29,6 +31,8 @@ Arm_Sampler::Arm_Sampler(int pin)
 	_count = 0;
 	_pin = pin;
 	base = 0;
+	previousState = 0;
+	currentState = 0;
 	myBuffer.sum = 0;
 	myBuffer.index = 0;
 	for (int i = 0; i < buffer_arrayLength; i++) {
@@ -65,16 +69,65 @@ Arm_Sampler::Arm_Sampler(int pin)
 // 	}
 // }
 
+// byte Arm_Sampler::evaluateSample(int signal, int threshhigh, int threshlow)
+// {
+// 	if(_count)
+// 	else{
+		
+// 		if(signal > 300){
+// 			return 2; 
+// 		}
+// 		else if(signal>=threshhigh) {
+// 				_open = 0;
+// 				_count = 0;
+// 				return 1;
+// 			}
+
+// 		else if(!_open && signal>=threshlow){
+// 				_open = 0;
+// 				return 1;
+// 			}
+// 		else {
+// 				_open = 1;
+// 				return 0;//remain open
+// 			}
+// 		}
+// }
 byte Arm_Sampler::evaluateSample(int signal, int threshhigh, int threshlow)
 {
-	if(signal > 300){
-		_count = 0;
-		return 2; 
-	}
-		if(signal>=threshhigh) return 1;
+		
+		if(signal > 300){
+			currentState = 2; 
+		}
+		else if(signal>=threshhigh) {
+				_open = 0;
+				_count = 0;
+				currentState =  1;
+			}
 
-		else return 0;//remain open
-	}
+		else if(!_open && signal>=threshlow){
+				_open = 0;
+				currentState =  1;
+			}
+		else {
+				_open = 1;
+				currentState = 0;//remain open
+			}
+
+		if (previousState == currentState){
+			_count = 0;
+		}
+		else{//if state changes
+			if(_count>=HOLD){
+				previousState = currentState;
+				_count = 0; //reset counter
+			}
+			else{
+				_count++;
+			}
+		}
+		return previousState;
+}
 
 	
 
@@ -96,10 +149,13 @@ int Arm_Sampler::simpleSample(byte del)
 
 void Arm_Sampler::checkBelow(int val, byte duration){
 	short counter = duration; 
+	int i = 0;
 	while(counter >0){
 		int reading = simpleSample();
 		if (reading<=val) counter--; 
 		else counter = duration; //reset the counter
+		i++;
+		if(i%60 == 0) updateBaseline();
 	}
 	delay(10);
 }
@@ -120,7 +176,7 @@ int Arm_Sampler::read()
   	raw = abs(raw-base);
   	updateBuffer(myBuffer, raw);
   	raw = averageBuffer(myBuffer);
-  	raw = raw*4; 
+  	raw *=2; 
   	return raw;
 }
 
