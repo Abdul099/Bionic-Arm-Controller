@@ -15,6 +15,7 @@ Arm_Sampler::Arm_Sampler()
 	_open = 1;
 	_count = 0;
 	_pin = A0;
+	hold = 1;
 	previousState = 0;
 	currentState = 0;
 	base = 0;
@@ -31,6 +32,7 @@ Arm_Sampler::Arm_Sampler(int pin)
 	_count = 0;
 	_pin = pin;
 	base = 0;
+	hold = 1;
 	previousState = 0;
 	currentState = 0;
 	myBuffer.sum = 0;
@@ -39,35 +41,6 @@ Arm_Sampler::Arm_Sampler(int pin)
       myBuffer.window[i] = 0;
     }
 }
-
-// byte Arm_Sampler::evaluateSample(int signal, int threshhigh, int threshlow)
-// {
-// 	if(signal > 300){
-// 		_count = 0;
-// 		return 2; 
-// 	}
-// 	if(_open){
-// 		if(signal>=threshhigh) _count++;
-// 		else _count = 0; //reset counter because the strak is broken
-// 		if(_count>=THRESHOLD_TOLERENCE){ //if enough readings have been registered above threshold 
-// 			_count = 0; //reset the count variable
-// 			_open = 0; //close the arm
-// 			return 0; //close the arm
-// 		}
-// 		else return 1;//remain open
-// 	}
-
-// 	else{ //if in closed state
-// 		if(signal<threshlow) _count++; // if the signal falls below the threshold, start counting
-// 		else _count = 0;
-// 		if(_count>=THRESHOLD_TOLERENCE2){
-// 			_count = 0;
-// 			_open = 1;//open the hand
-// 			return 1;
-// 		}
-// 		else return 0; //keep closed
-// 	}
-// }
 
 // byte Arm_Sampler::evaluateSample(int signal, int threshhigh, int threshlow)
 // {
@@ -95,7 +68,12 @@ Arm_Sampler::Arm_Sampler(int pin)
 // }
 byte Arm_Sampler::evaluateSample(int signal, int threshhigh, int threshlow)
 {
-		
+		byte holds[3];
+		holds[0] = 1;
+		holds[1] = 60;
+		holds[2] = 0;
+
+		hold = holds[previousState];
 		if(signal > 300){
 			currentState = 2; 
 		}
@@ -108,6 +86,7 @@ byte Arm_Sampler::evaluateSample(int signal, int threshhigh, int threshlow)
 		else if(!_open && signal>=threshlow){
 				_open = 0;
 				currentState =  1;
+				hold = 2;
 			}
 		else {
 				_open = 1;
@@ -118,7 +97,7 @@ byte Arm_Sampler::evaluateSample(int signal, int threshhigh, int threshlow)
 			_count = 0;
 		}
 		else{//if state changes
-			if(_count>=HOLD){
+			if(_count>=hold){
 				previousState = currentState;
 				_count = 0; //reset counter
 			}
@@ -162,12 +141,22 @@ void Arm_Sampler::checkBelow(int val, byte duration){
 
 void Arm_Sampler::updateBaseline(){
   long avg = 0;
+  if(base == 0){
   for(int i=0; i<100; i++){
     avg+= analogRead(A0);
     delay(10);
   }
   avg/=100;
   base = avg;
+}
+else{
+  avg = 0;
+  for(int i=0; i<100; i++){
+    avg+= simpleSample();
+  }
+  avg/=100;
+  base = avg;
+}
 }
 
 int Arm_Sampler::read()

@@ -30,6 +30,7 @@ class Arm_Sampler
 		int sampleRate;
 		int base; 
 		_buffer myBuffer;
+		byte hold;
 		int read();
 		void updateBuffer(_buffer& b, int val);
 		int averageBuffer(_buffer& b);

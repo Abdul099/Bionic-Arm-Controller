@@ -257,7 +257,7 @@ int Arm_Calibration::CalibrateDry(int* lowThresh, short* hold, short* baseline)
     uint8_t* trainingData = (uint8_t*) malloc(SIZE_TRAININGDATA*sizeof(uint8_t)); //array used to store sampled data points.
     
 	for (int i = 0; i<10; i++){
-		candidates[i].threshVal = (i+1)*(_peak)/10;//assign candidate values in increments of 10% starting at averageMin
+		candidates[i].threshVal = 10+ (i+1)*(_peak)/20;//assign candidate values in increments of 10% starting at averageMin
 		candidates[i].score = 0;//initialize scores with zeros
 		candidates[i].hold = 30; //default hold duration 
 	}
@@ -312,12 +312,10 @@ int Arm_Calibration::CalibrateDry(int* lowThresh, short* hold, short* baseline)
 
     int threshold = candidates[selectedIndex].threshVal;
     
-    *lowThresh = ((candidates[1].threshVal)+_averageMin)/2; //change the pointer value of the lower threshold
+    *lowThresh = (candidates[1].threshVal); //change the pointer value of the lower threshold
 
     screen.printToScreen("Results:");
    	delay(500);
-    screen.printToScreen("Min", _averageMin);
-    delay(2000);
     screen.printToScreen("Peak", _peak);
     delay(2000);
     screen.printToScreen("Index     Chosen", selectedIndex);
