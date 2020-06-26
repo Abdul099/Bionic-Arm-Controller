@@ -70,7 +70,7 @@ byte Arm_Sampler::evaluateSample(int signal, int threshhigh, int threshlow)
 {
 		byte holds[3];
 		holds[0] = 1;
-		holds[1] = 60;
+		holds[1] = 50;
 		holds[2] = 0;
 
 		hold = holds[previousState];
@@ -105,6 +105,8 @@ byte Arm_Sampler::evaluateSample(int signal, int threshhigh, int threshlow)
 				_count++;
 			}
 		}
+
+		//if(currentState == 2) {myBuffer.window[myBuffer.index] = 20; //erases the error reading
 		return previousState;
 }
 
@@ -113,7 +115,7 @@ byte Arm_Sampler::evaluateSample(int signal, int threshhigh, int threshlow)
 int Arm_Sampler::simpleSample()
 {
 	int sample = read();
-	delay(10);
+	delay(20);
 	Serial.println(sample);
 	return sample; 
 }
@@ -142,21 +144,21 @@ void Arm_Sampler::checkBelow(int val, byte duration){
 void Arm_Sampler::updateBaseline(){
   long avg = 0;
   if(base == 0){
-  for(int i=0; i<100; i++){
-    avg+= analogRead(A0);
-    delay(10);
-  }
+  	for(int i=0; i<100; i++){
+   	 avg+= analogRead(A0);
+   	 delay(10);
+ 	 }
+ 	avg/=100;
+  	base = avg;
+	}
+  else{
+  	avg = 0;
+  	for(int i=0; i<100; i++){
+    	avg+= simpleSample();
+  	}
   avg/=100;
   base = avg;
-}
-else{
-  avg = 0;
-  for(int i=0; i<100; i++){
-    avg+= simpleSample();
-  }
-  avg/=100;
-  base = avg;
-}
+	}
 }
 
 int Arm_Sampler::read()

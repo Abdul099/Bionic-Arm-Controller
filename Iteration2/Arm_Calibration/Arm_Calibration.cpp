@@ -312,7 +312,7 @@ int Arm_Calibration::CalibrateDry(int* lowThresh, short* hold, short* baseline)
 
     int threshold = candidates[selectedIndex].threshVal;
     
-    *lowThresh = (candidates[1].threshVal); //change the pointer value of the lower threshold
+    *lowThresh = (candidates[1].threshVal)/2; //change the pointer value of the lower threshold
 
     screen.printToScreen("Results:");
    	delay(500);
