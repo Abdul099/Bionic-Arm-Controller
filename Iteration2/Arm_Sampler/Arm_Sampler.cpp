@@ -19,10 +19,12 @@ Arm_Sampler::Arm_Sampler()
 	previousState = 0;
 	currentState = 0;
 	base = 0;
+	peak = 0;
 	myBuffer.sum = 0;
 	myBuffer.index = 0;
+	peakWindow = PEAKWINDOW;
 	for (int i = 0; i < buffer_arrayLength; i++) {
-      myBuffer.window[i] = 0;
+    myBuffer.window[i] = 0;
     }
 }
 
@@ -42,30 +44,29 @@ Arm_Sampler::Arm_Sampler(int pin)
     }
 }
 
-// byte Arm_Sampler::evaluateSample(int signal, int threshhigh, int threshlow)
-// {
-// 	if(_count)
-// 	else{
-		
-// 		if(signal > 300){
-// 			return 2; 
-// 		}
-// 		else if(signal>=threshhigh) {
-// 				_open = 0;
-// 				_count = 0;
-// 				return 1;
-// 			}
-
-// 		else if(!_open && signal>=threshlow){
-// 				_open = 0;
-// 				return 1;
-// 			}
-// 		else {
-// 				_open = 1;
-// 				return 0;//remain open
-// 			}
-// 		}
-// }
+byte Arm_Sampler::evaluateSampleFindPeak(int signal, int threshold)
+{
+	if(signal > 300){
+		return 2;
+	}
+	if(peak){
+		peakWindow--;
+		if(peakWindow<=0){
+			peakWindow = PEAKWINDOW;//reset back to default value
+			peak = 0;
+		}
+	}
+	else{
+		if(signal>threshold){
+			peak = 1;
+			if(_open){
+				_open = 0;
+			}
+			else _open = 1;
+		}
+	}
+	return _open;
+}
 byte Arm_Sampler::evaluateSample(int signal, int threshhigh, int threshlow)
 {
 		byte holds[3];

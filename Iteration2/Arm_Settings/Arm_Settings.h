@@ -18,7 +18,7 @@
 #define NUM_CHANNELS 2
 #define NUM_SERVOS 5//max 5
 #define emgpin1 A0
-#define emgpin2 A1
+#define emgpin2 A0
 #define indexServo 0 //pin on servo relay module
 #define thumbServo 1
 #define middleServo 2
@@ -46,4 +46,5 @@
 #define HOLD 2
 // other settings 
 #define buffer_arrayLength 8
+#define PEAKWINDOW 40
 #endif

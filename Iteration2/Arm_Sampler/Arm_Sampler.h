@@ -31,6 +31,8 @@ class Arm_Sampler
 		int base; 
 		_buffer myBuffer;
 		byte hold;
+		byte peakWindow;
+		bool peak;
 		int read();
 		void updateBuffer(_buffer& b, int val);
 		int averageBuffer(_buffer& b);
@@ -40,6 +42,7 @@ class Arm_Sampler
 		Arm_Sampler(int pin);
 		void updateBaseline();
 		byte evaluateSample(int signal, int threshhigh, int threshlow);
+		byte evaluateSampleFindPeak(int signal, int threshhigh);
 		int simpleSample();
 		int simpleSample(byte delay);
 		void checkBelow(int val, byte duration);

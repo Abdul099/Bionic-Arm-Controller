@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: June 22, 2020
+  Last Updated: June 26, 2020
 */
 #include <Arduino.h>
 #include <Arm_Calibration.h>
@@ -257,7 +257,7 @@ int Arm_Calibration::CalibrateDry(int* lowThresh, short* hold, short* baseline)
     uint8_t* trainingData = (uint8_t*) malloc(SIZE_TRAININGDATA*sizeof(uint8_t)); //array used to store sampled data points.
     
 	for (int i = 0; i<10; i++){
-		candidates[i].threshVal = 10+ (i+1)*(_peak)/20;//assign candidate values in increments of 10% starting at averageMin
+		candidates[i].threshVal = 10+ (i+1)*(_peak)/20;//assign candidate values in increments of 5% starting at baseline
 		candidates[i].score = 0;//initialize scores with zeros
 		candidates[i].hold = 30; //default hold duration 
 	}
@@ -289,7 +289,7 @@ int Arm_Calibration::CalibrateDry(int* lowThresh, short* hold, short* baseline)
 			}
 		}
 		screen.printToScreen("Relax");
-		delay(500); //allow for patient to relax
+		delay(500);
     }
 
 	free(trainingData);
@@ -312,7 +312,7 @@ int Arm_Calibration::CalibrateDry(int* lowThresh, short* hold, short* baseline)
 
     int threshold = candidates[selectedIndex].threshVal;
     
-    *lowThresh = (candidates[1].threshVal)/2; //change the pointer value of the lower threshold
+    *lowThresh = (candidates[0].threshVal); //change the pointer value of the lower threshold
 
     screen.printToScreen("Results:");
    	delay(500);
