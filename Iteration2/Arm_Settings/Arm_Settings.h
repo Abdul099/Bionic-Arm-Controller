@@ -47,4 +47,6 @@
 // other settings 
 #define buffer_arrayLength 8
 #define PEAKWINDOW 40
+#define PEAK_HOLD 2
+
 #endif

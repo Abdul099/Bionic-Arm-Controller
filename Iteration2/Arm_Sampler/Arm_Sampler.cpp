@@ -1,7 +1,7 @@
 /*
   Authors: Abdullatif Hassan, Theodore Janson
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated:June 22, 2020
+  Last Updated:June 30, 2020
 */
 
 #include <Arm_Sampler.h>
@@ -15,7 +15,7 @@ Arm_Sampler::Arm_Sampler()
 	_open = 1;
 	_count = 0;
 	_pin = A0;
-	hold = 1;
+	hold = 0;
 	previousState = 0;
 	currentState = 0;
 	base = 0;
@@ -24,7 +24,7 @@ Arm_Sampler::Arm_Sampler()
 	myBuffer.index = 0;
 	peakWindow = PEAKWINDOW;
 	for (int i = 0; i < buffer_arrayLength; i++) {
-    myBuffer.window[i] = 0;
+   		 myBuffer.window[i] = 0;
     }
 }
 
@@ -33,14 +33,16 @@ Arm_Sampler::Arm_Sampler(int pin)
 	_open = 1;
 	_count = 0;
 	_pin = pin;
-	base = 0;
-	hold = 1;
+	hold = 0;
 	previousState = 0;
 	currentState = 0;
+	base = 0;
+	peak = 0;
 	myBuffer.sum = 0;
 	myBuffer.index = 0;
+	peakWindow = PEAKWINDOW;
 	for (int i = 0; i < buffer_arrayLength; i++) {
-      myBuffer.window[i] = 0;
+   		 myBuffer.window[i] = 0;
     }
 }
 
@@ -57,16 +59,26 @@ byte Arm_Sampler::evaluateSampleFindPeak(int signal, int threshold)
 		}
 	}
 	else{
-		if(signal>threshold){
+		if(signal>=threshold){
+			hold++;
+		}
+		else{
+			hold = 0;
+		}
+		if(signal>threshold && hold>=PEAK_HOLD){//look for PEAK_HOLD+1 number of consecutive signals greater than threshold
+			hold = 0;
 			peak = 1;
 			if(_open){
 				_open = 0;
 			}
-			else _open = 1;
+			else{
+				_open = 1;
+			}
 		}
 	}
 	return _open;
 }
+
 byte Arm_Sampler::evaluateSample(int signal, int threshhigh, int threshlow)
 {
 		byte holds[3];
