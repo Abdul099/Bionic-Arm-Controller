@@ -1,8 +1,8 @@
 /*
-  Project Name: Bionic Arm Controller ver 1.2.2
+  Project Name: Bionic Arm Controller ver 1.2.4
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: June 26, 2020
+  Last Updated: July 13, 2020
   Description: Simplified program that receives emg input via analog pin and outputs PWM signals to 5 servo motors. An all-or-none basis is used to drive the control,
                where a signal below a certain threshold causes the arm to open and a signal above the threshold causes the arm to close. The threshold is determined
                through calibration, which is done through the Arm_Calibration library.
@@ -70,9 +70,11 @@ void loop() {
   }
   else {
     if (opened ==2){//error in electrode
-      screen.printToScreen("Misplaced Electrode");
+      screen.printToScreen("Misplaced  Electrode");
+      delay(1000);
     }
     if (opened == 1) {
+      screen.printToScreen("");
       servo.openFinger(thumbServo);
       servo.openFinger(pinkyServo);
       servo.openFinger(indexServo);
@@ -80,6 +82,7 @@ void loop() {
       delay(CLOSED_DELAY);
     }
     else {
+      screen.printToScreen("");
       servo.closeFinger(thumbServo);
       servo.closeFinger(pinkyServo);
       servo.closeFinger(indexServo);
@@ -88,9 +91,9 @@ void loop() {
     }
   }
 
-  if(counter>=50000 && opened){
-    sampler.updateBaseline();
-    counter = 0; //reset counter
-  }
+//  if(counter>=50000 && opened){
+//    sampler.updateBaseline();
+//    counter = 0; //reset counter
+//  }
   openedPrev = opened;
 }

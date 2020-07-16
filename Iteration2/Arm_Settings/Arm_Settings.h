@@ -8,11 +8,11 @@
 #ifndef Arm_Settings_h
 #define Arm_Settings_h
 
-#define LED_DEBUG_MODE true
+#define LED_DEBUG_MODE 0
 //servo PWM settings
 #define PWM_frequency 60
-#define SERVOMIN 230
-#define SERVOMAX 410
+#define SERVOMIN 230 //250
+#define SERVOMAX 410 //450
 
 //emg channel and servo settings
 #define NUM_CHANNELS 2
@@ -37,7 +37,7 @@
 //Calibration Settings
 #define samples 200
 #define NUM_CONTRACTIONS 10 // number of contractions needed for advanced calibration mode
-#define SIZE_TRAININGDATA 20 //max 100
+#define SIZE_TRAININGDATA 30 //max 40
 #define TRAINING_DELAY 20 //sampling period for trainingData
 
 //sampler settings
@@ -47,6 +47,6 @@
 // other settings 
 #define buffer_arrayLength 8
 #define PEAKWINDOW 40
-#define PEAK_HOLD 2
+#define PEAK_HOLD 1
 
 #endif
