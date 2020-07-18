@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: May 27, 2020
+  Last Updated: July 17, 2020
 */
 #include <Arm_Screen.h>
 #include <Wire.h>
@@ -31,7 +31,7 @@ void Arm_Screen::setTextSize(int size)
 
 void Arm_Screen::printToScreen(char str[])
 {
-	char *cpy = str;
+	char *cpy = str;//make a copy to avoid averwriting the string 
 	display.clearDisplay(); 
     display.setTextColor(WHITE); 
 	display.setCursor(0, 0);

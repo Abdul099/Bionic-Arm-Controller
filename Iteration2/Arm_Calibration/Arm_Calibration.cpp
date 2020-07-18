@@ -82,8 +82,6 @@ int Arm_Calibration::CalibrateAdvanced(int* steadyclose)
 {
 	Arm_Screen screen = Arm_Screen();
 	screen.prepare();
-	// screen.printToScreen("Prepare   to Relax");
- // 	delay(1000); //wait 1 second for patient to 
 	screen.printToScreen("Relax");
    	delay(1000); //wait for a second before we actually start sampling
 
@@ -96,11 +94,7 @@ int Arm_Calibration::CalibrateAdvanced(int* steadyclose)
     	_averageMin += _amplitude;
   	}
 
-	 _averageMin = _averageMin/(samples);
-	// _tempAvgMin = _averageMin; 
-	 //_averageMin = 0;
- 	// screen.printToScreen("Prepare   to        Contract");
-  //  	delay(2000);                
+	_averageMin = _averageMin/(samples);               
 	screen.printToScreen("Contract");
 
   	_peak = 0;
@@ -176,8 +170,6 @@ int Arm_Calibration::CalibrateAdvanced(int* steadyclose)
 			}
 		}
     }
-    //_averageMin /=(samples*10);
-    //if(_averageMin - _tempAvgMin <20 || _tempAvgMin - _averageMin <20) _averageMin = _tempAvgMin;
 	free(trainingData);
 	int selectedIndex = 2; //default value
 
@@ -211,13 +203,6 @@ int Arm_Calibration::CalibrateAdvanced(int* steadyclose)
 	delay(3000);
 	screen.printToScreen("Thresh",threshold);
 	delay(3000);
-
-	// int calscore = 0; 
-	// calscore += 6*(candidates[selectedIndex].score - candidates[selectedIndex].falsepos);
-	// if(selectedIndex>0)calscore += 2*(candidates[selectedIndex-1].score - candidates[selectedIndex-1].falsepos);
-	// if(selectedIndex<9)calscore += 2*(candidates[selectedIndex+1].score - candidates[selectedIndex+1].falsepos);
-	// Serial.print("Calibration score: ");
-	// Serial.println(calscore); //max 100
 
 	screen.printToScreen("Done");
    	return threshold;//return the upper threshold
@@ -274,13 +259,13 @@ int Arm_Calibration::CalibrateDry(short* baseline)
 			delay(TRAINING_DELAY);
 			_amplitude = sampler.simpleSample();
 			//printToLaptop(_amplitude);
-			trainingData[i] = _amplitude/4; //compress the 10 bit ADC reading into an 8bit in order to store it
+			trainingData[i] = _amplitude/2; //compress the 10 bit ADC reading into an 8bit in order to store it
 		}
 
 		for(int i = 0; i<10; i++){//for each candidate
 			bool added = 0;
 			for(int j = 0; j<SIZE_TRAININGDATA; j++){//for each datapoint in trainingData
-				if(!added && (trainingData[j]*4)>candidates[i].threshVal){ //decompress the value from training data and compare it
+				if(!added && (trainingData[j]*2)>candidates[i].threshVal){ //decompress the value from training data and compare it
 					candidates[i].score++;
 					added = 1; //will add hold modifications here
 				}
@@ -321,7 +306,7 @@ int Arm_Calibration::CalibrateDry(short* baseline)
 
 	screen.printToScreen("Done");
 
-   	return threshold;//return the upper threshold
+   	return threshold;
 }
 
 //helper method that allows us to print to the graph of the Arduino Serial Monitor

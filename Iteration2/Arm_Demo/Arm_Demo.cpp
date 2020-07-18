@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: May 13, 2020
+  Last Updated: July 17, 2020
 
 */
 
@@ -16,7 +16,7 @@ extern Arm_Servo servo;
 Arm_Demo::Arm_Demo()
 {
 	_standardDelay = 1500;
-	for (int i=0; i< NUM_SERVOS; i++){ //temperory thing, later figure out a way to store pins in a datastructure that can be accessible
+	for (int i=0; i< NUM_SERVOS; i++){ 
 		servoPins[i] = i;
 	}
 }

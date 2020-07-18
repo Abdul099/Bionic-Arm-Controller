@@ -1,7 +1,7 @@
 /*
   Authors: Abdullatif Hassan, Theodore Janson
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated:June 30, 2020
+  Last Updated:July 17, 2020
 */
 
 #include <Arm_Sampler.h>
@@ -46,6 +46,7 @@ Arm_Sampler::Arm_Sampler(int pin)
     }
 }
 
+
 byte Arm_Sampler::evaluateSampleFindPeak(int signal, int threshold)
 {
 	if(signal > 300){
@@ -79,53 +80,17 @@ byte Arm_Sampler::evaluateSampleFindPeak(int signal, int threshold)
 	return _open;
 }
 
-byte Arm_Sampler::evaluateSample(int signal, int threshhigh, int threshlow)
+int Arm_Sampler::read()
 {
-		byte holds[3];
-		holds[0] = 1;
-		holds[1] = 50;
-		holds[2] = 0;
-
-		hold = holds[previousState];
-		if(signal > 300){
-			currentState = 2; 
-		}
-		else if(signal>=threshhigh) {
-				_open = 0;
-				_count = 0;
-				currentState =  1;
-			}
-
-		else if(!_open && signal>=threshlow){
-				_open = 0;
-				currentState =  1;
-				hold = 2;
-			}
-		else {
-				_open = 1;
-				currentState = 0;//remain open
-			}
-
-		if (previousState == currentState){
-			_count = 0;
-		}
-		else{//if state changes
-			if(_count>=hold){
-				previousState = currentState;
-				_count = 0; //reset counter
-			}
-			else{
-				_count++;
-			}
-		}
-
-		//if(currentState == 2) {myBuffer.window[myBuffer.index] = 20; //erases the error reading
-		return previousState;
+  	int raw = analogRead(_pin);
+  	raw = abs(raw-base);
+  	updateBuffer(myBuffer, raw);
+  	raw = averageBuffer(myBuffer);
+  	raw *=2; 
+  	return raw;
 }
 
-	
-
-int Arm_Sampler::simpleSample()
+int Arm_Sampler::simpleSample()//wrapper function for read
 {
 	int sample = read();
 	delay(20);
@@ -172,16 +137,6 @@ void Arm_Sampler::updateBaseline(){
   avg/=100;
   base = avg;
 	}
-}
-
-int Arm_Sampler::read()
-{
-  	int raw = analogRead(_pin);
-  	raw = abs(raw-base);
-  	updateBuffer(myBuffer, raw);
-  	raw = averageBuffer(myBuffer);
-  	raw *=2; 
-  	return raw;
 }
 
 void Arm_Sampler::setBaseline(short value)
