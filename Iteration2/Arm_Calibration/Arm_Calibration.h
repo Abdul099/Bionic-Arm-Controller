@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: June 30, 2020
+  Last Updated: July 17, 2020
 
 */
 
@@ -31,7 +31,7 @@ class Arm_Calibration
 		Arm_Calibration(int pin);
 		int Calibrate();
 		int CalibrateAdvanced(int* steadyclose);
-		int CalibrateDry(int* lowThresh, short* hold, short* baseline);
+		int CalibrateDry(short* baseline);
 };
 
 #endif

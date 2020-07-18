@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: June 30, 2020
+  Last Updated: July 17, 2020
 */
 #include <Arduino.h>
 #include <Arm_Calibration.h>
@@ -223,7 +223,7 @@ int Arm_Calibration::CalibrateAdvanced(int* steadyclose)
    	return threshold;//return the upper threshold
 }
 
-int Arm_Calibration::CalibrateDry(int* lowThresh, short* hold, short* baseline)
+int Arm_Calibration::CalibrateDry(short* baseline)
 {
 	Arm_Sampler sampler = Arm_Sampler();
 	Arm_Screen screen = Arm_Screen();
@@ -249,8 +249,7 @@ int Arm_Calibration::CalibrateDry(int* lowThresh, short* hold, short* baseline)
 
 	struct candidate{ //create struct for 10 candidate thresholds, of whoch 1 will be chosen at the end
 		unsigned int threshVal : 10;
-		unsigned int score : 6; //may add false positive score later on
-		byte hold;  
+		unsigned int score : 6; //may add false positive score later on 
 	};
 
 	candidate candidates[10];
@@ -259,7 +258,6 @@ int Arm_Calibration::CalibrateDry(int* lowThresh, short* hold, short* baseline)
 	for (int i = 0; i<10; i++){
 		candidates[i].threshVal = 10+ (i+1)*(_peak)/20;//assign candidate values in increments of 5% starting at baseline
 		candidates[i].score = 0;//initialize scores with zeros
-		candidates[i].hold = 30; //default hold duration 
 	}
 
 	for (int i = 0; i<SIZE_TRAININGDATA; i++){
@@ -311,8 +309,6 @@ int Arm_Calibration::CalibrateDry(int* lowThresh, short* hold, short* baseline)
 	}
 
     int threshold = candidates[selectedIndex].threshVal;
-    
-    *lowThresh = (candidates[0].threshVal); //change the pointer value of the lower threshold
 
     screen.printToScreen("Results:");
    	delay(500);

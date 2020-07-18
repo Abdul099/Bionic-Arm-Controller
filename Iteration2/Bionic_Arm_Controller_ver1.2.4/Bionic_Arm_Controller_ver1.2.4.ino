@@ -20,8 +20,6 @@
 
 int amp1;
 int thresh;
-short hold;
-int lowThresh;
 int counter = 0;
 byte opened = 1;
 byte openedPrev = 0; 
@@ -35,9 +33,7 @@ Arm_Screen screen = Arm_Screen();
 void setup() {
   Wire.begin();
   Serial.begin(9600);
-  thresh = Calibrate.CalibrateDry(&lowThresh, &hold, &baseline);
-  Serial.print("Lowthresh: ");
-  Serial.println(lowThresh);
+  thresh = Calibrate.CalibrateDry(&baseline);
   delay(1000);
   servo.setup();
   screen.prepare();
