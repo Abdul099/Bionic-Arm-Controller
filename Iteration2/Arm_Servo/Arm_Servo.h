@@ -14,15 +14,9 @@
 #include <Wire.h>
 #include <Arm_Settings.h>
 
-typedef struct _Servo //might add position field lateron
-{
-	int servoPin;
-};
-
 class Arm_Servo
 {
 	private: 
-		_Servo _servos[NUM_SERVOS];//remove
 		int _currentIndex;
 		void  moveServo(int pin, int position); //might become public
 

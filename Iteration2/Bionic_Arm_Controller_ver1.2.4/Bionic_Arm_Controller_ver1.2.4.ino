@@ -1,10 +1,11 @@
 /*
   Project Name: Bionic Arm Controller ver 1.2.4
-  Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
+  Authors: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
+           Theodore Janson
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: July 13, 2020
-  Description: Simplified program that receives emg input via analog pin and outputs PWM signals to 5 servo motors. An all-or-none basis is used to drive the control,
-               where a signal below a certain threshold causes the arm to open and a signal above the threshold causes the arm to close. The threshold is determined
+  Last Updated: July 20, 2020
+  Description: Arm Controller sketch that receives emg input via analog pin and outputs PWM signals for up to 5 servo motors. An all-or-none basis is used to drive the control,
+               where a signal below a certain threshold causes the arm to remain in the same state (open/close) and  signal above the threshold causes the arm to change state. The threshold is determined
                through calibration, which is done through the Arm_Calibration library.
 */
 #include <Arm_Settings.h>
@@ -21,8 +22,7 @@
 int amp1;
 int thresh;
 int counter = 0;
-byte opened = 1;
-byte openedPrev = 0; 
+byte opened = 0;
 short baseline;
 Arm_Calibration Calibrate = Arm_Calibration();
 Arm_Servo servo = Arm_Servo();
@@ -34,7 +34,6 @@ void setup() {
   Wire.begin();
   Serial.begin(9600);
   thresh = Calibrate.CalibrateDry(&baseline);
-  delay(1000);
   servo.setup();
   screen.prepare();
   sampler.setBaseline(baseline);
@@ -75,6 +74,7 @@ void loop() {
       servo.openFinger(pinkyServo);
       servo.openFinger(indexServo);
       servo.openFinger(middleServo);
+      servo.openFinger(ringServo);
       delay(CLOSED_DELAY);
     }
     else {
@@ -82,6 +82,7 @@ void loop() {
       servo.closeFinger(thumbServo);
       servo.closeFinger(pinkyServo);
       servo.closeFinger(indexServo);
+      servo.closeFinger(ringServo);
       servo.closeFinger(middleServo);
       delay(OPEN_DELAY);
     }
@@ -91,5 +92,4 @@ void loop() {
 //    sampler.updateBaseline();
 //    counter = 0; //reset counter
 //  }
-  openedPrev = opened;
 }

@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: July 18, 2020
+  Last Updated: July 20, 2020
 */
 
 #ifndef Arm_Settings_h
@@ -13,19 +13,6 @@
 #define SKIP_CALIBRATION 1
 #define LED_DEBUG_MODE 0
 
-//servo PWM settings
-#define PWM_frequency 60
-
-#ifndef BRUNEL_ARM
-#define SERVOMIN 230 //250
-#define SERVOMAX 410 //450
-#endif
-
-#ifndef MBEC_ARM
-#define SERVOMIN 250 //250
-#define SERVOMAX 450 //450
-#endif
-
 //emg channel and servo settings
 #define NUM_CHANNELS 2
 #define NUM_SERVOS 5//max 5
@@ -33,9 +20,33 @@
 #define indexServo 0 //pin on servo relay module
 #define thumbServo 1
 #define middleServo 2
-#define ringServo 4
-#define pinkyServo 3
+#define ringServo 3
+#define pinkyServo 4
 
+//servo PWM settings
+#define PWM_frequency 60
+
+#ifdef BRUNEL_ARM
+#define HAND_TYPE 0
+#define SERVOMIN 230 
+#define SERVOMAX 410 
+#define THUMB_MOD 20 //20
+#define INDEX_MOD 10  //20
+#define MIDDLE_MOD 25 //25
+#define RING_MOD 30 //30
+#define PINKY_MOD 0 //not used in this case but must be defined nevertheless
+#endif
+
+#ifdef MBEC_ARM
+#define HAND_TYPE 1
+#define SERVOMIN 250 
+#define SERVOMAX 450 
+#define THUMB_MOD 0 
+#define INDEX_MOD 0
+#define MIDDLE_MOD 0
+#define RING_MOD 0
+#define PINKY_MOD 0
+#endif
 
 //delay intervals
 #define OPEN_DELAY 20

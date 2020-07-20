@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: July 17, 2020
+  Last Updated: July 20, 2020
 
 */
 
@@ -110,6 +110,6 @@ void Arm_Demo::gangsterSign()
 	servo.closeFinger(thumbServo);
 	servo.openFinger(indexServo);
 	servo.closeFinger(middleServo);
+	servo.openFinger(ringServo);
 	servo.openFinger(pinkyServo);
-	servo.closeFinger(ringServo);
 }
