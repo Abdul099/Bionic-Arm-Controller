@@ -15,7 +15,7 @@ extern Arm_Servo servo;
 
 Arm_Demo::Arm_Demo()
 {
-	_standardDelay = 1500;
+	_standardDelay = 1500; //delay between movements in demo script
 	for (int i=0; i< NUM_SERVOS; i++){ 
 		servoPins[i] = i;
 	}
@@ -35,6 +35,7 @@ void Arm_Demo::runDemo()
 	openHand();
 	delay(_standardDelay);
 	fingerByFinger();
+    delay(_standardDelay);
 	thumbsUp();
 	delay(_standardDelay);
 	openHand();
@@ -65,25 +66,25 @@ void Arm_Demo::closeHand()
 void Arm_Demo::fingerByFinger()
 {
 	servo.closeFinger(pinkyServo);
-	delay(_standardDelay*0.5);
+	delay(_standardDelay*0.3);
 	servo.closeFinger(ringServo);
-	delay(_standardDelay*0.5);
+	delay(_standardDelay*0.3);
 	servo.closeFinger(middleServo);
-	delay(_standardDelay*0.5);	
+	delay(_standardDelay*0.3);	
 	servo.closeFinger(indexServo);
-	delay(_standardDelay*0.5);
+	delay(_standardDelay*0.3);
 	servo.closeFinger(thumbServo);
-	delay(_standardDelay*0.5);	
+	delay(_standardDelay*0.3);	
 	servo.openFinger(pinkyServo);
-	delay(_standardDelay*0.5);
+	delay(_standardDelay*0.3);
 	servo.openFinger(ringServo);
-	delay(_standardDelay*0.5);
+	delay(_standardDelay*0.3);
 	servo.openFinger(middleServo);
-	delay(_standardDelay*0.5);
+	delay(_standardDelay*0.3);
 	servo.openFinger(indexServo);
-	delay(_standardDelay*0.5);
+	delay(_standardDelay*0.3);
 	servo.openFinger(thumbServo);
-	delay(_standardDelay*0.5);	
+	delay(_standardDelay*0.3);	
 }
 
 void Arm_Demo::thumbsUp()

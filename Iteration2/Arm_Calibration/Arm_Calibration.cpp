@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: July 17, 2020
+  Last Updated: July 19, 2020
 */
 #include <Arduino.h>
 #include <Arm_Calibration.h>
@@ -220,7 +220,9 @@ int Arm_Calibration::CalibrateDry(short* baseline)
    	delay(500); //wait for a second before we actually start sampling
    	screen.printToScreen("Fix       Electrode  position");
    	delay(500);
-   	sampler.checkBelow(50, 30);//look for 30 consecutive readings below 50 to make sure the electrode is placed properly           
+   	sampler.checkBelow(50, 30);//look for 30 consecutive readings below 50 to make sure the electrode is placed properly 
+   	if(SKIP_CALIBRATION) return 20; 
+
 	screen.printToScreen("Contract");
 
   	_peak = 0;

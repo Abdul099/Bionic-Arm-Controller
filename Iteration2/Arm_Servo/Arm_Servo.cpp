@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: June 3, 2020
+  Last Updated: July 19, 2020
 
 */
 
@@ -23,12 +23,6 @@ void Arm_Servo::setup(){
 	pwm.setPWMFreq(PWM_frequency);
 }
 
-void Arm_Servo::addServo(int pin)
-{
-	_servos[_currentIndex].servoPin = pin;
-	_currentIndex++;
-}
-
 void Arm_Servo::closeFinger(int pin)
 {
 	moveServo(pin, -10);
@@ -42,6 +36,8 @@ void Arm_Servo::openFinger(int pin)
 
 void Arm_Servo::moveServo(int pin, int pos) //might become a public method later on
 {
-	if(pin == thumbServo) pwm.setPWM(pin, 0, SERVOMAX-pos);
+	if(pin == thumbServo) pwm.setPWM(pin, 0, SERVOMAX-pos-30);
+	else if(pin ==pinkyServo) pwm.setPWM(pin, 0, pos+ SERVOMIN + 25);
+	else if(pin == middleServo) pwm.setPWM(pin, 0, pos+ SERVOMIN + 30);
 	else pwm.setPWM(pin, 0, pos + SERVOMIN);
 }

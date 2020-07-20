@@ -1,18 +1,30 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: July 17, 2020
-
+  Last Updated: July 18, 2020
 */
 
 #ifndef Arm_Settings_h
 #define Arm_Settings_h
 
+#define BRUNEL_ARM
+//#define MBEC_ARM
+
+#define SKIP_CALIBRATION 1
 #define LED_DEBUG_MODE 0
+
 //servo PWM settings
 #define PWM_frequency 60
+
+#ifndef BRUNEL_ARM
 #define SERVOMIN 230 //250
 #define SERVOMAX 410 //450
+#endif
+
+#ifndef MBEC_ARM
+#define SERVOMIN 250 //250
+#define SERVOMAX 450 //450
+#endif
 
 //emg channel and servo settings
 #define NUM_CHANNELS 2
@@ -21,8 +33,9 @@
 #define indexServo 0 //pin on servo relay module
 #define thumbServo 1
 #define middleServo 2
-#define pinkyServo 3
 #define ringServo 4
+#define pinkyServo 3
+
 
 //delay intervals
 #define OPEN_DELAY 20
@@ -45,6 +58,6 @@
 #define HOLD 2
 #define buffer_arrayLength 8
 #define PEAKWINDOW 40
-#define PEAK_HOLD 1
+#define PEAK_HOLD 0
 
 #endif
