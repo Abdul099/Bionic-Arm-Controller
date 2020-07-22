@@ -80,6 +80,17 @@ byte Arm_Sampler::evaluateSampleFindPeak(int signal, int threshold)
 	return _open;
 }
 
+byte Arm_Sampler::evaluateSample2Electrodes(int signal1, int threshold1, int signal2, int threshold2)
+{
+	byte firstChannel = evaluateSampleFindPeak(signal1, threshold1);
+	if(firstChannel==0){
+		if(signal2>threshold2) {
+			return 3;
+		}
+	}
+	return firstChannel;
+}
+
 int Arm_Sampler::read()
 {
   	int raw = analogRead(_pin);

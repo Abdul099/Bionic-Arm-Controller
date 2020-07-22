@@ -32,6 +32,7 @@ class Arm_Calibration
 		int Calibrate();
 		int CalibrateAdvanced(int* steadyclose);
 		int CalibrateDry(short* baseline);
+		int CalibrateDry2Electrodes(short* baseline, short* baseline2);
 };
 
 #endif

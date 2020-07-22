@@ -1,7 +1,7 @@
 /*
   Authors: Abdullatif Hassan, Theodore Janson
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: July 17, 2020
+  Last Updated: July 22, 2020
 
 */
 
@@ -43,6 +43,7 @@ class Arm_Sampler
 		void updateBaseline();
 		byte evaluateSample(int signal, int threshhigh, int threshlow);
 		byte evaluateSampleFindPeak(int signal, int threshhigh);
+		byte evaluateSample2Electrodes(int signal1, int threshold1, int signal2, int threshold2);
 		int simpleSample();
 		int simpleSample(byte delay);
 		void checkBelow(int val, byte duration);

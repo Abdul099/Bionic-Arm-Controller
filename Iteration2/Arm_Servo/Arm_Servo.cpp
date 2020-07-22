@@ -53,3 +53,4 @@ void Arm_Servo::moveServo(int pin, int pos) //might become a public method later
 		else pwm.setPWM(pin, 0, pos + SERVOMIN);
 	}
 }
+

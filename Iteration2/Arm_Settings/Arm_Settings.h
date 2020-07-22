@@ -14,7 +14,7 @@
 #define LED_DEBUG_MODE 0
 
 //emg channel and servo settings
-#define NUM_CHANNELS 2
+#define NUM_CHANNELS 1 //1 or 2
 #define NUM_SERVOS 5//max 5
 #define emgpin1 A0
 #define indexServo 0 //pin on servo relay module

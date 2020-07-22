@@ -14,6 +14,7 @@
 #include <Wire.h>
 #include <Arm_Settings.h>
 
+
 class Arm_Servo
 {
 	private: 
@@ -26,7 +27,6 @@ class Arm_Servo
 		void closeFinger(int pin);
 		void openFinger(int pin);
 		void setup();
-
 };
 
 #endif

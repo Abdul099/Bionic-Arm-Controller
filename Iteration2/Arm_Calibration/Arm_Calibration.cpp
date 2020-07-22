@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: July 19, 2020
+  Last Updated: July 22, 2020
 */
 #include <Arduino.h>
 #include <Arm_Calibration.h>
@@ -221,6 +221,111 @@ int Arm_Calibration::CalibrateDry(short* baseline)
    	screen.printToScreen("Fix       Electrode  position");
    	delay(500);
    	sampler.checkBelow(50, 30);//look for 30 consecutive readings below 50 to make sure the electrode is placed properly 
+   	if(SKIP_CALIBRATION) return 20; 
+
+	screen.printToScreen("Contract");
+
+  	_peak = 0;
+
+  	for (int i = 0; i< samples; i++){
+	  	_amplitude = sampler.simpleSample();
+	    if(_amplitude >= _peak) _peak = _amplitude;
+  	}
+
+	delay(1500);
+
+	struct candidate{ //create struct for 10 candidate thresholds, of whoch 1 will be chosen at the end
+		unsigned int threshVal : 10;
+		unsigned int score : 6; //may add false positive score later on 
+	};
+
+	candidate candidates[10];
+    uint8_t* trainingData = (uint8_t*) malloc(SIZE_TRAININGDATA*sizeof(uint8_t)); //array used to store sampled data points.
+    
+	for (int i = 0; i<10; i++){
+		candidates[i].threshVal = 10+ (i+1)*(_peak)/20;//assign candidate values in increments of 5% starting at baseline
+		candidates[i].score = 0;//initialize scores with zeros
+	}
+
+	for (int i = 0; i<SIZE_TRAININGDATA; i++){
+  		trainingData[i] = 0; //initialize an array of zeros for trainingData
+	}
+
+	screen.printToScreen("Contract  on        number");
+	delay(1000);
+
+	for(int c = 0; c<NUM_CONTRACTIONS; c++){ // for each contraction
+		screen.printToScreen(c+1);
+
+		for(int i =0; i<SIZE_TRAININGDATA; i++){//fill each datapoint in trainingData
+			delay(TRAINING_DELAY);
+			_amplitude = sampler.simpleSample();
+			//printToLaptop(_amplitude);
+			trainingData[i] = _amplitude/2; //compress the 10 bit ADC reading into an 8bit in order to store it
+		}
+
+		for(int i = 0; i<10; i++){//for each candidate
+			bool added = 0;
+			for(int j = 0; j<SIZE_TRAININGDATA; j++){//for each datapoint in trainingData
+				if(!added && (trainingData[j]*2)>candidates[i].threshVal){ //decompress the value from training data and compare it
+					candidates[i].score++;
+					added = 1; //will add hold modifications here
+				}
+			}
+		}
+		screen.printToScreen("Relax");
+		delay(500);
+    }
+
+	free(trainingData);
+	int selectedIndex = 2; //default value
+
+	for (int i=0; i<10; i++){
+		Serial.print(i);
+		Serial.print(F(" True positive:"));
+		Serial.print(candidates[i].threshVal);
+		Serial.print(F("  "));
+		Serial.println(candidates[i].score);
+	}
+
+	for(int i=9; i>0; i--){ 
+		if(candidates[i].score>=8){ // aim at capturing 80 percent of contractions with less than 30% false positive
+			selectedIndex = i;
+			break;
+		}
+	}
+
+    int threshold = candidates[selectedIndex].threshVal;
+
+    screen.printToScreen("Results:");
+   	delay(500);
+    screen.printToScreen("Peak", _peak);
+    delay(2000);
+    screen.printToScreen("Index     Chosen", selectedIndex);
+	delay(3000);
+	screen.printToScreen("Thresh",threshold);
+	delay(3000);
+
+	screen.printToScreen("Done");
+
+   	return threshold;
+}
+
+
+int Arm_Calibration::CalibrateDry2Electrodes(short* baseline, short* baseline2)
+{
+	Arm_Sampler sampler = Arm_Sampler();
+	Arm_Sampler sampler2 = Arm_Sampler();
+	Arm_Screen screen = Arm_Screen();
+	screen.prepare();
+	screen.printToScreen("Relax");
+	delay(500);
+   	sampler.updateBaseline();
+   	sampler2.updateBaseline();
+   	*baseline = sampler.getBaseline();
+   	*baseline2 = sampler2.getBaseline();
+   	sampler.checkBelow(50, 30);//look for 30 consecutive readings below 50 to make sure the electrode is placed properly 
+   	sampler2.checkBelow(50, 30);
    	if(SKIP_CALIBRATION) return 20; 
 
 	screen.printToScreen("Contract");
