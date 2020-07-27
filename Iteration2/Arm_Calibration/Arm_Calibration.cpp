@@ -314,18 +314,17 @@ int Arm_Calibration::CalibrateDry(short* baseline)
 
 int Arm_Calibration::CalibrateDry2Electrodes(short* baseline, short* baseline2)
 {
-	Arm_Sampler sampler = Arm_Sampler();
-	Arm_Sampler sampler2 = Arm_Sampler();
+	Arm_Sampler sampler = Arm_Sampler(emgpin1);
+	Arm_Sampler sampler2 = Arm_Sampler(emgpin2);
 	Arm_Screen screen = Arm_Screen();
 	screen.prepare();
 	screen.printToScreen("Relax");
-	delay(500);
    	sampler.updateBaseline();
    	sampler2.updateBaseline();
-   	*baseline = sampler.getBaseline();
-   	*baseline2 = sampler2.getBaseline();
    	sampler.checkBelow(50, 30);//look for 30 consecutive readings below 50 to make sure the electrode is placed properly 
    	sampler2.checkBelow(50, 30);
+   	*baseline = sampler.getBaseline();
+   	*baseline2 = sampler2.getBaseline();
    	if(SKIP_CALIBRATION) return 20; 
 
 	screen.printToScreen("Contract");

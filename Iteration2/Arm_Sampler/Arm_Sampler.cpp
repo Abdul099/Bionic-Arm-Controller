@@ -83,7 +83,7 @@ byte Arm_Sampler::evaluateSampleFindPeak(int signal, int threshold)
 byte Arm_Sampler::evaluateSample2Electrodes(int signal1, int threshold1, int signal2, int threshold2)
 {
 	byte firstChannel = evaluateSampleFindPeak(signal1, threshold1);
-	if(firstChannel==0){
+	if(peak==0){ //if no peak detected in first channel
 		if(signal2>threshold2) {
 			return 3;
 		}
@@ -134,7 +134,7 @@ void Arm_Sampler::updateBaseline(){
   long avg = 0;
   if(base == 0){
   	for(int i=0; i<100; i++){
-   	 avg+= analogRead(A0);
+   	 avg+= analogRead(_pin);
    	 delay(10);
  	 }
  	avg/=100;

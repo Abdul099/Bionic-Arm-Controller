@@ -4,9 +4,7 @@
            Theodore Janson
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
   Last Updated: July 22, 2020
-  Description: Arm Controller sketch that receives emg input via analog pin (up to 2 channels) and outputs PWM signals for up to 5 servo motors. An all-or-none basis is used to drive the control,
-               where a signal below a certain threshold causes the arm to remain in the same state (open/close) and  signal above the threshold causes the arm to change state. The threshold is determined
-               through calibration, which is done through the Arm_Calibration library.
+  Description: Arm Controller sketch that receives emg input via analog pin (up to 2 channels) and outputs PWM signals for up to 5 servo motors.
 */
 #include <Arm_Settings.h>
 #include <Wire.h>
@@ -29,8 +27,8 @@ short baseline2;
 Arm_Calibration Calibrate = Arm_Calibration();
 Arm_Servo servo = Arm_Servo();
 Arm_Demo demo = Arm_Demo();
-Arm_Sampler sampler = Arm_Sampler();
-Arm_Sampler sampler2 = Arm_Sampler();
+Arm_Sampler sampler = Arm_Sampler(emgpin1);
+Arm_Sampler sampler2 = Arm_Sampler(emgpin2);
 Arm_Screen screen = Arm_Screen();
 
 void setup() {
@@ -41,13 +39,16 @@ void setup() {
   servo.setup();
   screen.prepare();
   sampler.setBaseline(baseline);
+  if(NUM_CHANNELS ==2) sampler2.setBaseline(baseline2);
 }
 
 void loop() {
+  Serial.print("1: ");
   amp1 = sampler.simpleSample();//we start by reading the signal value from the emg sensor --> assign this value to amp
-  amp2 = sampler2.simpleSample();//we start by reading the signal value from the emg sensor --> assign this value to amp
+  Serial.print("2: ");
+  if(NUM_CHANNELS  ==2) amp2 = sampler2.simpleSample();
   if (NUM_CHANNELS == 1)  opened = sampler.evaluateSampleFindPeak(amp1, thresh);
-  else if (NUM_CHANNELS == 2) opened = sampler.evaluateSample2Electrodes(amp1, thresh, amp2, thresh2);
+  else if (NUM_CHANNELS == 2) opened = sampler.evaluateSample2Electrodes(amp1, thresh, amp2, thresh);
   if (LED_DEBUG_MODE) {
     switch (opened) {
       case 0:
@@ -70,7 +71,7 @@ void loop() {
   }
   else {
     switch (opened) {
-      case 3:
+      case 3: //special move
         screen.printToScreen("");
         servo.closeFinger(thumbServo);
         servo.closeFinger(pinkyServo);
