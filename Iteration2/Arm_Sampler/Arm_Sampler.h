@@ -22,7 +22,7 @@
 class Arm_Sampler
 {
 	private: 
-		bool _open;
+		byte _open;
 		uint8_t _count;
 		int previousState;
 		int currentState; 

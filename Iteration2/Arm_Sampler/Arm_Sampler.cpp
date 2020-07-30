@@ -83,9 +83,17 @@ byte Arm_Sampler::evaluateSampleFindPeak(int signal, int threshold)
 byte Arm_Sampler::evaluateSample2Electrodes(int signal1, int threshold1, int signal2, int threshold2)
 {
 	byte firstChannel = evaluateSampleFindPeak(signal1, threshold1);
+	if(firstChannel==2) return 2; //electrode misplacement error
+		if(signal2 > 300){
+		return 2;
+	}
 	if(peak==0){ //if no peak detected in first channel
 		if(signal2>threshold2) {
+			_open = 3;
 			return 3;
+		}
+		else{// if no peak in both channels just return the previous state
+			return _open;
 		}
 	}
 	return firstChannel;

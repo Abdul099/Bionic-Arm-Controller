@@ -3,7 +3,7 @@
   Authors: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
            Theodore Janson
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: July 22, 2020
+  Last Updated: July 29, 2020
   Description: Arm Controller sketch that receives emg input via analog pin (up to 2 channels) and outputs PWM signals for up to 5 servo motors.
 */
 #include <Arm_Settings.h>
@@ -43,9 +43,9 @@ void setup() {
 }
 
 void loop() {
-  Serial.print("1: ");
+//  Serial.print("1: ");
   amp1 = sampler.simpleSample();//we start by reading the signal value from the emg sensor --> assign this value to amp
-  Serial.print("2: ");
+//  Serial.print("2: ");
   if(NUM_CHANNELS  ==2) amp2 = sampler2.simpleSample();
   if (NUM_CHANNELS == 1)  opened = sampler.evaluateSampleFindPeak(amp1, thresh);
   else if (NUM_CHANNELS == 2) opened = sampler.evaluateSample2Electrodes(amp1, thresh, amp2, thresh);

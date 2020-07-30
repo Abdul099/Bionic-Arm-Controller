@@ -325,7 +325,7 @@ int Arm_Calibration::CalibrateDry2Electrodes(short* baseline, short* baseline2)
    	sampler2.checkBelow(50, 30);
    	*baseline = sampler.getBaseline();
    	*baseline2 = sampler2.getBaseline();
-   	if(SKIP_CALIBRATION) return 20; 
+   	if(SKIP_CALIBRATION) return 10; 
 
 	screen.printToScreen("Contract");
 
