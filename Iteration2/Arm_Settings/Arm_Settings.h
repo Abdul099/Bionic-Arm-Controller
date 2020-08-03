@@ -37,15 +37,15 @@
 #define MIDDLE_MOD 20 //25
 #define RING_MOD 50 //30
 #define PINKY_MOD 0 //not used in this case but must be defined nevertheless
-#define THUMB_MIN 250
-#define INDEX_MIN 250
-#define MIDDLE_MIN 250
-#define RING_MIN 250
-#define PINKY_MIN 250
+#define THUMB_MIN 230
+#define INDEX_MIN 230
+#define MIDDLE_MIN 230
+#define RING_MIN 230
+#define PINKY_MIN 230
 #define THUMB_MAX 410
 #define INDEX_MAX 410
 #define MIDDLE_MAX 410
-#define RING_MAX 410
+#define RING_MAX 475
 #define PINKY_MAX 410
 #endif
 
@@ -58,6 +58,17 @@
 #define MIDDLE_MOD 0
 #define RING_MOD 0
 #define PINKY_MOD 0
+#define THUMB_MIN 250
+#define INDEX_MIN 250
+#define MIDDLE_MIN 250
+#define RING_MIN 250
+#define PINKY_MIN 250
+#define THUMB_MAX 450
+#define INDEX_MAX 450
+#define MIDDLE_MAX 450
+#define RING_MAX 450
+#define PINKY_MAX 450
+
 #endif
 
 //delay intervals

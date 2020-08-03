@@ -110,6 +110,6 @@ void Arm_Demo::gangsterSign()
 	servo.closeFinger(thumbServo);
 	servo.openFinger(indexServo);
 	servo.closeFinger(middleServo);
-	servo.openFinger(ringServo);
 	servo.openFinger(pinkyServo);
+	servo.openFinger(ringServo);
 }
