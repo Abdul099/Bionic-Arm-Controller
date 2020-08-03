@@ -12,6 +12,7 @@
 
 #define SKIP_CALIBRATION 1
 #define LED_DEBUG_MODE 0
+#define SPECIAL_POSITION 0
 
 //emg channel and servo settings
 #define NUM_CHANNELS 2 //1 or 2
@@ -31,11 +32,21 @@
 #define HAND_TYPE 0
 #define SERVOMIN 230 
 #define SERVOMAX 410 
-#define THUMB_MOD 20 //20
-#define INDEX_MOD 10  //20
-#define MIDDLE_MOD 25 //25
-#define RING_MOD 30 //30
+#define THUMB_MOD 25 //20
+#define INDEX_MOD 20  //20
+#define MIDDLE_MOD 20 //25
+#define RING_MOD 50 //30
 #define PINKY_MOD 0 //not used in this case but must be defined nevertheless
+#define THUMB_MIN 250
+#define INDEX_MIN 250
+#define MIDDLE_MIN 250
+#define RING_MIN 250
+#define PINKY_MIN 250
+#define THUMB_MAX 410
+#define INDEX_MAX 410
+#define MIDDLE_MAX 410
+#define RING_MAX 410
+#define PINKY_MAX 410
 #endif
 
 #ifdef MBEC_ARM

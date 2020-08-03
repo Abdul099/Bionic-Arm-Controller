@@ -20,13 +20,14 @@ class Arm_Servo
 	private: 
 		int _currentIndex;
 		void  moveServo(int pin, int position); //might become public
-
+		void  moveServo2(int pin, bool position); //new moveServo
 	public:
 		Arm_Servo();
 		void addServo(int pin);
 		void closeFinger(int pin);
 		void openFinger(int pin);
 		void setup();
+		void PerformSpecialMovement(int pin, int pos);
 };
 
 #endif
