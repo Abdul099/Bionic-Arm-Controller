@@ -1,14 +1,14 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: July 20, 2020
+  Last Updated: August 8, 2020
 */
 
 #ifndef Arm_Settings_h
 #define Arm_Settings_h
 
-#define BRUNEL_ARM
-//#define MBEC_ARM
+//#define BRUNEL_ARM
+#define MBEC_ARM
 
 #define SKIP_CALIBRATION 1
 #define LED_DEBUG_MODE 0
@@ -17,19 +17,18 @@
 //emg channel and servo settings
 #define NUM_CHANNELS 2 //1 or 2
 #define NUM_SERVOS 5//max 5
-#define emgpin1 A0
-#define emgpin2 A3
+#define emgpin1 A3
+#define emgpin2 A0
 #define indexServo 0 //pin on servo relay module
 #define thumbServo 1
 #define middleServo 2
 #define ringServo 3
 #define pinkyServo 4
 
-//servo PWM settings
-#define PWM_frequency 60
 
 #ifdef BRUNEL_ARM
 #define HAND_TYPE 0
+#define PWM_frequency 60
 #define SERVOMIN 230 
 #define SERVOMAX 410 
 #define THUMB_MOD 25 //20
@@ -37,13 +36,13 @@
 #define MIDDLE_MOD 20 //25
 #define RING_MOD 50 //30
 #define PINKY_MOD 0 //not used in this case but must be defined nevertheless
-#define THUMB_MIN 230
+#define THUMB_MIN 300
 #define INDEX_MIN 230
 #define MIDDLE_MIN 230
 #define RING_MIN 230
 #define PINKY_MIN 230
 #define THUMB_MAX 410
-#define INDEX_MAX 410
+#define INDEX_MAX 430
 #define MIDDLE_MAX 410
 #define RING_MAX 475
 #define PINKY_MAX 410
@@ -51,23 +50,24 @@
 
 #ifdef MBEC_ARM
 #define HAND_TYPE 1
-#define SERVOMIN 250 
-#define SERVOMAX 450 
+#define PWM_frequency 50
+#define SERVOMIN 610
+#define SERVOMAX 2360
 #define THUMB_MOD 0 
 #define INDEX_MOD 0
 #define MIDDLE_MOD 0
 #define RING_MOD 0
 #define PINKY_MOD 0
-#define THUMB_MIN 250
-#define INDEX_MIN 250
-#define MIDDLE_MIN 250
-#define RING_MIN 250
-#define PINKY_MIN 250
-#define THUMB_MAX 450
+#define THUMB_MIN 260
+#define INDEX_MIN 160
+#define MIDDLE_MIN 500
+#define RING_MIN 180
+#define PINKY_MIN 450
+#define THUMB_MAX 50
 #define INDEX_MAX 450
-#define MIDDLE_MAX 450
-#define RING_MAX 450
-#define PINKY_MAX 450
+#define MIDDLE_MAX 110
+#define RING_MAX 440
+#define PINKY_MAX 220
 
 #endif
 

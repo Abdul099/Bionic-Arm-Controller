@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: July 19, 2020
+  Last Updated: August 8, 2020
 
 */
 
@@ -66,7 +66,7 @@ void Arm_Servo::moveServo2(int pin, bool open) //might become a public method la
 			else pwm.setPWM(pin, 0, SERVOMIN);
 		}
 		else{
-			if(pin == thumbServo) pwm.setPWM(pin, 0, THUMB_MAX);
+			if(pin == thumbServo) pwm.setPWM(pin, 0, THUMB_MIN);
 			else if(pin ==ringServo) pwm.setPWM(pin, 0, RING_MIN);
 			else if(pin == middleServo) pwm.setPWM(pin, 0, MIDDLE_MIN);
 			else if(pin == indexServo) pwm.setPWM(pin, 0, INDEX_MIN);
@@ -75,7 +75,7 @@ void Arm_Servo::moveServo2(int pin, bool open) //might become a public method la
 		}
 	}
 	else{
-		if(HAND_TYPE == 0){
+		if(HAND_TYPE == 0){//brunel
 			if(pin == thumbServo) pwm.setPWM(pin, 0, THUMB_MIN);
 			else if(pin ==ringServo) pwm.setPWM(pin, 0, RING_MAX);
 			else if(pin == middleServo) pwm.setPWM(pin, 0, MIDDLE_MAX);
@@ -83,7 +83,7 @@ void Arm_Servo::moveServo2(int pin, bool open) //might become a public method la
 			else pwm.setPWM(pin, 0, SERVOMAX);
 		}
 		else{
-			if(pin == thumbServo) pwm.setPWM(pin, 0, THUMB_MIN);
+			if(pin == thumbServo) pwm.setPWM(pin, 0, THUMB_MAX);
 			else if(pin ==ringServo) pwm.setPWM(pin, 0, RING_MAX);
 			else if(pin == middleServo) pwm.setPWM(pin, 0, MIDDLE_MAX);
 			else if(pin == indexServo) pwm.setPWM(pin, 0, INDEX_MAX);
