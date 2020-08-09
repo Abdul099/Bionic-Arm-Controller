@@ -3,7 +3,7 @@
   Authors: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
            Theodore Janson
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: July 29, 2020
+  Last Updated: August 9, 2020
   Description: Arm Controller sketch that receives emg input via analog pin (up to 2 channels) and outputs PWM signals for up to 5 servo motors.
 */
 #include <Arm_Settings.h>
@@ -73,11 +73,7 @@ void loop() {
     switch (opened) {
       case 3: //special move
         screen.printToScreen("");
-        servo.closeFinger(thumbServo);
-        servo.closeFinger(pinkyServo);
-        servo.openFinger(indexServo);
-        servo.closeFinger(ringServo);
-        servo.openFinger(middleServo);
+        servo.PerformSpecialMovement();
         delay(OPEN_DELAY);
         break;
       case 2://error in electrode
