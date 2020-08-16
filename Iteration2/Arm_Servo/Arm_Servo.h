@@ -27,7 +27,7 @@ class Arm_Servo
 		void closeFinger(int pin);
 		void openFinger(int pin);
 		void setup();
-		void PerformSpecialMovement(int pin, int pos);
+		void PerformSpecialMovement();
 };
 
 #endif

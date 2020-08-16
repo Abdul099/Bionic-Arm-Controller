@@ -12,17 +12,17 @@
 
 #define SKIP_CALIBRATION 1
 #define LED_DEBUG_MODE 0
-#define SPECIAL_POSITION 0
+#define SPECIAL_POSITION 2
 
 //emg channel and servo settings
 #define NUM_CHANNELS 2 //1 or 2
 #define NUM_SERVOS 5//max 5
 #define emgpin1 A3
 #define emgpin2 A0
-#define indexServo 0 //pin on servo relay module
-#define thumbServo 1
-#define middleServo 2
-#define ringServo 3
+#define indexServo 3//pin on servo relay module
+#define thumbServo 0
+#define middleServo 1 
+#define ringServo 2
 #define pinkyServo 4
 
 
@@ -58,16 +58,18 @@
 #define MIDDLE_MOD 0
 #define RING_MOD 0
 #define PINKY_MOD 0
-#define THUMB_MIN 260
-#define INDEX_MIN 160
-#define MIDDLE_MIN 500
-#define RING_MIN 180
-#define PINKY_MIN 450
-#define THUMB_MAX 50
-#define INDEX_MAX 450
-#define MIDDLE_MAX 110
-#define RING_MAX 440
-#define PINKY_MAX 220
+//closed
+#define THUMB_MIN 320
+#define INDEX_MIN 170//170
+#define MIDDLE_MIN 400//400
+#define RING_MIN 180//440
+#define PINKY_MIN 440//155
+//open
+#define THUMB_MAX 170
+#define INDEX_MAX 450//455
+#define MIDDLE_MAX 133//133
+#define RING_MAX 440//180
+#define PINKY_MAX 155//440
 
 #endif
 
@@ -91,7 +93,7 @@
 #define THRESHOLD_TOLERENCE2 2 //number of successive lows required to initiate an 'open hand' order
 #define HOLD 2
 #define buffer_arrayLength 8
-#define PEAKWINDOW 40
+#define PEAKWINDOW 20
 #define PEAK_HOLD 0
 
 #endif

@@ -92,7 +92,7 @@ void Arm_Servo::moveServo2(int pin, bool open) //might become a public method la
 		}
 	}
 }
-void Arm_Servo::PerformSpecialMovement(int pin, int pos) //might become a public method later on
+void Arm_Servo::PerformSpecialMovement() 
 {
 	if(SPECIAL_POSITION == 0){ //V-Sign
 		openFinger(indexServo);
