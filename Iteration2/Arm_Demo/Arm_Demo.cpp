@@ -1,7 +1,7 @@
 /*
   Author: Abdullatif Hassan <abdullatif.hassan@mail.mcgill.ca>
   Source Repository: https://github.com/Abdul099/Bionic-Arm-Controller
-  Last Updated: July 20, 2020
+  Last Updated: August 20, 2020
 
 */
 
@@ -47,6 +47,18 @@ void Arm_Demo::runDemo()
 	gangsterSign();
 	delay(_standardDelay);
 	openHand();
+}
+
+void Arm_Demo::specialPositions()
+{
+	openHand();
+	delay(_standardDelay);
+	for(int i = 0; i<4; i++){
+		servo.PerformSpecialMovement(i);
+		delay(_standardDelay);
+		openHand();
+		delay(_standardDelay);
+	}
 }
 
 void Arm_Demo::openHand()

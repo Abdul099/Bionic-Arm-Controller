@@ -92,34 +92,80 @@ void Arm_Servo::moveServo2(int pin, bool open) //might become a public method la
 		}
 	}
 }
-void Arm_Servo::PerformSpecialMovement() 
+void Arm_Servo::PerformSpecialMovement(byte POSITION) //only for mbec arm
 {
-	if(SPECIAL_POSITION == 0){ //V-Sign
+	if(POSITION == 0){ //V-Sign
 		openFinger(indexServo);
 		openFinger(middleServo);	
 		closeFinger(thumbServo);
 		closeFinger(pinkyServo);
 		closeFinger(ringServo);
 	}
-	else if(SPECIAL_POSITION==1){  // Pen-Grip
+	else if(POSITION==1){  // 2 finger fine grip
+		pwm.setPWM(middleServo, 0, MIDDLE_MIN);
+		pwm.setPWM(thumbServo, 0, THUMB_MIN);
+		delay(1000);
+		pwm.setPWM(thumbServo, 0, 250);
+		delay(500);
+		pwm.setPWM(middleServo, 0, 300);
+		delay(500);
+		pwm.setPWM(thumbServo, 0, THUMB_MAX);
+		pwm.setPWM(middleServo,0,MIDDLE_MAX);
+		delay(1000);
+	}
+	else if(POSITION==2){  // slow fine grip
+  		for (int i = 0; i <= 10; i++) {
+    		pwm.setPWM(middleServo, 0, MIDDLE_MAX + (MIDDLE_MIN - MIDDLE_MAX)*i / 10);//min is greater than max for both fingers
+    		pwm.setPWM(thumbServo, 0, THUMB_MAX+ (THUMB_MIN -THUMB_MAX)*i / 10);
+    		delay(200);
+			}
+	}
+	else if(POSITION==3){  // OK sign
+		closeFinger(indexServo);
+		openFinger(middleServo);	
+		closeFinger(thumbServo);
+		openFinger(pinkyServo);
+		openFinger(ringServo);
+	}
+	else if(POSITION==4){  // Thumbs-Up
+		closeFinger(indexServo);
+		openFinger(middleServo);	
+		closeFinger(thumbServo);
+		openFinger(pinkyServo);
+		openFinger(ringServo);
+	}
+}
+
+void Arm_Servo::OpenHand()
+{
+	if(HAND_TYPE == 0){
+		openFinger(indexServo);
+		openFinger(middleServo);	
+		openFinger(thumbServo);
+		openFinger(ringServo);
+	}
+	else if(HAND_TYPE == 1){
+		openFinger(indexServo);
+		openFinger(middleServo);	
+		openFinger(thumbServo);
+		openFinger(pinkyServo);
+		openFinger(ringServo);
+	}
+}
+
+void Arm_Servo::CloseHand()
+{
+	if(HAND_TYPE ==0){
 		closeFinger(indexServo);
 		closeFinger(middleServo);	
 		closeFinger(thumbServo);
-		openFinger(pinkyServo);
-		openFinger(ringServo);
+		closeFinger(ringServo);
 	}
-	else if(SPECIAL_POSITION==2){  // OK sign
+	else if(HAND_TYPE == 1){
 		closeFinger(indexServo);
-		openFinger(middleServo);	
+		closeFinger(middleServo);	
 		closeFinger(thumbServo);
-		openFinger(pinkyServo);
-		openFinger(ringServo);
-	}
-	else if(SPECIAL_POSITION==3){  // Thumbs-Up
-		closeFinger(indexServo);
-		openFinger(middleServo);	
-		closeFinger(thumbServo);
-		openFinger(pinkyServo);
-		openFinger(ringServo);
+		closeFinger(pinkyServo);
+		closeFinger(ringServo);
 	}
 }

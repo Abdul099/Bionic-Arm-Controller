@@ -29,6 +29,7 @@ class Arm_Demo
 		Arm_Demo(); 
 		Arm_Demo(int delay);
 		void runDemo();
+		void specialPositions();
 
 };
 #endif

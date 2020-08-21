@@ -15,7 +15,7 @@
 #define SPECIAL_POSITION 2
 
 //emg channel and servo settings
-#define NUM_CHANNELS 2 //1 or 2
+#define NUM_CHANNELS 1 //1 or 2
 #define NUM_SERVOS 5//max 5
 #define emgpin1 A3
 #define emgpin2 A0
@@ -46,6 +46,8 @@
 #define MIDDLE_MAX 410
 #define RING_MAX 475
 #define PINKY_MAX 410
+#define THUMB_MID 300
+#define MIDDLE_MID 300
 #endif
 
 #ifdef MBEC_ARM
@@ -63,14 +65,16 @@
 #define INDEX_MIN 170//170
 #define MIDDLE_MIN 400//400
 #define RING_MIN 180//440
-#define PINKY_MIN 440//155
+#define PINKY_MIN 430//155
 //open
 #define THUMB_MAX 170
 #define INDEX_MAX 450//455
 #define MIDDLE_MAX 133//133
 #define RING_MAX 440//180
-#define PINKY_MAX 155//440
-
+#define PINKY_MAX 210//440
+//for special positions
+#define THUMB_MID 300
+#define MIDDLE_MID 300
 #endif
 
 //delay intervals
@@ -93,7 +97,7 @@
 #define THRESHOLD_TOLERENCE2 2 //number of successive lows required to initiate an 'open hand' order
 #define HOLD 2
 #define buffer_arrayLength 8
-#define PEAKWINDOW 20
+#define PEAKWINDOW 10//20
 #define PEAK_HOLD 0
 
 #endif

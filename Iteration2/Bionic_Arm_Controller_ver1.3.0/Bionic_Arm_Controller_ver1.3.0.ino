@@ -73,7 +73,7 @@ void loop() {
     switch (opened) {
       case 3: //special move
         screen.printToScreen("");
-        servo.PerformSpecialMovement();
+        servo.PerformSpecialMovement(0);
         delay(OPEN_DELAY);
         break;
       case 2://error in electrode
