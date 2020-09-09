@@ -13,7 +13,7 @@
 #include <Arm_Settings.h>
 
 
-class Arm_Servo
+class Arm_Bluetooth
 {
 	private: 
 		byte state;
